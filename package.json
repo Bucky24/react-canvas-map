@@ -1,4 +1,49 @@
 {
-    "name": "react-canvas-map",
-    "version": "0.1.0",
+	"name": "react-canvas-map",
+	"version": "0.1.0",
+	"description": "A 2D map plugin for React Canvas",
+	"main": "build/index.js",
+	"scripts": {
+		"clean": "rm -rf build",
+		"build": "babel src --out-dir build",
+		"mapExample": "webpack-dev-server --config ./examples/mapExample/webpack.config.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Bucky24/react-canvas-map.git"
+	},
+	"keywords": [
+		"react",
+		"canvas",
+		"map",
+		"2d"
+	],
+	"author": "Bucky24",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/Bucky24/react-canvas-map/issues"
+	},
+	"homepage": "https://github.com/Bucky24/react-canvas-map#readme",
+	"devDependencies": {
+		"@babel/cli": "^7.10.4",
+		"@babel/core": "^7.10.4",
+		"@babel/plugin-transform-react-jsx": "^7.10.4",
+		"@babel/preset-env": "^7.10.4",
+		"@babel/preset-react": "^7.10.4",
+		"@bucky24/react-canvas": "^1.2.2",
+		"babel-loader": "^8.1.0",
+		"css-loader": "^3.6.0",
+		"file-loader": "^6.0.0",
+		"html-webpack-plugin": "^4.3.0",
+		"image-webpack-loader": "^6.0.0",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1",
+		"style-loader": "^1.2.1",
+		"webpack": "^4.43.0",
+		"webpack-cli": "^3.3.12",
+		"webpack-dev-server": "^3.11.0"
+	},
+	"peerDependencies": {
+		"@bucky24/react-canvas": "1.x"
+	}
 }
