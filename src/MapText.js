@@ -6,8 +6,6 @@ const propTypes = {
     cellSize: PropTypes.number.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
     xOff: PropTypes.number.isRequired,
     yOff: PropTypes.number.isRequired,
     texts: PropTypes.arrayOf(PropTypes.shape({
@@ -24,8 +22,6 @@ const MapText = ({
     cellSize,
     x,
     y,
-    width,
-    height,
     xOff,
     yOff,
     texts,
@@ -90,9 +86,6 @@ const MapText = ({
                             // nothing to do, top is default
                             break;
                     }
-
-                    context.rect(x,y,width,height);
-                    context.clip();
 
                     context.fillText(text, textX, textY);
             

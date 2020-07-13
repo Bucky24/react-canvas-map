@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Images, CanvasComponent, Container } from '@bucky24/react-canvas';
+import {
+    Images,
+    CanvasComponent,
+    Clip,
+ } from '@bucky24/react-canvas';
 
 import {
     Layer,
@@ -39,8 +43,7 @@ class MapLayer extends CanvasComponent {
     }
 
     getImage(imageData) {
-        const {  x, y, width, height } = this.props;
-		const { xOff, yOff } = imageData;
+		const { xOff, yOff, rot } = imageData;
 
         const rect = this.cellToReal(
             imageData.cellX + (xOff || 0),
@@ -49,67 +52,10 @@ class MapLayer extends CanvasComponent {
             imageData.cellHeight,
         );
 
-        let clip = {
-            x: 0,
-            y: 0,
-            width: rect.width,
-            height: rect.height,   
-        };
-
-        if (rect.x < x) {
-            const overlap = x - rect.x;
-            if (overlap > rect.width) {
-                // we're off the map completely, no point to drawing
-                return null;
-            }
-
-            clip.x = overlap;
-            rect.x = x;
-        }
-
-        if (rect.y < y) {
-            const overlap = y - rect.y;
-            if (overlap > rect.height) {
-                return null
-            }
-
-            clip.y = overlap;
-            rect.y = y;
-        }
-
-
-        if (rect.x + rect.width > x + width) {
-            const overlap = (rect.x + rect.width) - (x + width);
-            if (overlap > rect.width) {
-                // we're off the map completely, no point to drawing
-                return null;
-            }
-
-            const nonOverlapPercent = 1 - (overlap / rect.width);
-
-            rect.width -= overlap;
-            // basically the clip width is whatever portion of the current rect is NOT overlapped
-            clip.width = rect.width * nonOverlapPercent;
-        }
-
-        if (rect.y + rect.height > y + height) {
-            const overlap = (rect.y + rect.height) - (y + height);
-            if (overlap > rect.height) {
-                // we're off the map completely, no point to drawing
-                return null;
-            }
-
-            const nonOverlapPercent = 1 - (overlap / rect.height);
-
-            rect.height -= overlap;
-            // basically the clip width is whatever portion of the current rect is NOT overlapped
-            clip.height = rect.height * nonOverlapPercent;
-        }
-
         return {
             src: imageData.src,
             ...rect,
-            clip,
+            rot,
         };
     }
 
@@ -159,8 +105,6 @@ class MapLayer extends CanvasComponent {
                 key="text"
                 x={x}
                 y={y}
-                height={height}
-                width={width}
                 xOff={xOff}
                 yOff={yOff}
                 cellSize={cellSize}
@@ -172,9 +116,14 @@ class MapLayer extends CanvasComponent {
             return null;
         }
 
-        return <Container>
+        return <Clip
+            x={x}
+            y={y}
+            width={width}
+            height={height}
+        >
             { components }
-        </Container>;
+        </Clip>;
     }
 }
 

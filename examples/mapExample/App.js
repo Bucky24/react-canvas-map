@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Canvas } from '@bucky24/react-canvas';
 import { Map } from "@bucky24/react-canvas-map";
 
-const GREEN_IMAGE = "https://re-mm-assets.s3.amazonaws.com/product_photo/46595/large_large_Poly_Lime_374u_1471509935.jpg";
-const RED_IMAGE = "http://sohme.com/wp-content/uploads/2015/07/red.png";
-const BLUE_IMAGE = "http://clipart-library.com/img/980271.png";
-const YELLOW_IMAGE = "https://www.iconsdb.com/icons/preview/yellow/square-xxl.png";
+const GREEN_IMAGE = "https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-squares-01/3/33-512.png";
+const RED_IMAGE = "https://cdn5.vectorstock.com/i/1000x1000/09/29/arrow-in-square-icon-digital-red-vector-18320929.jpg";
+const BLUE_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Right-pointing_white_arrow_in_blue_rounded_square.svg/512px-Right-pointing_white_arrow_in_blue_rounded_square.svg.png";
+const YELLOW_IMAGE = "https://previews.123rf.com/images/faysalfarhan/faysalfarhan1711/faysalfarhan171134535/89527541-next-arrow-icon-isolated-on-yellow-square-button-reflected-abstract-illustration.jpg";
 
 
 function App() {
@@ -47,6 +47,7 @@ function App() {
                                 cellHeight: 0.5,
                                 cellX: 5,
                                 cellY: 2,
+                                rot: 0
                             },
                             {
                                 src: RED_IMAGE,
@@ -54,7 +55,8 @@ function App() {
                                 cellHeight: 0.5,
                                 cellX: 5,
                                 cellY: 2,
-								xOff: 0.5,
+                                xOff: 0.5,
+                                rot: 90,
                             },
                             {
                                 src: BLUE_IMAGE,
@@ -63,7 +65,8 @@ function App() {
                                 cellX: 5,
                                 cellY: 2,
 								xOff: 0.5,
-								yOff: 0.5,
+                                yOff: 0.5,
+                                rot: 180,
                             },
                             {
                                 src: YELLOW_IMAGE,
@@ -71,7 +74,8 @@ function App() {
                                 cellHeight: 0.5,
                                 cellX: 5,
                                 cellY: 2,
-								yOff: 0.5,
+                                yOff: 0.5,
+                                rot: 270,
                             },
                         ],
                     },

@@ -8,7 +8,8 @@ export const Layer = PropTypes.shape({
         cellX: PropTypes.number.isRequired,
         cellY: PropTypes.number.isRequired,
 		xOff: PropTypes.number,
-		yOff: PropTypes.number,
+        yOff: PropTypes.number,
+        rot: PropTypes.number,
     })),
     text: PropTypes.arrayOf(PropTypes.shape({
         text: PropTypes.string.isRequired,
