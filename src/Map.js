@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CanvasComponent, Rect } from '@bucky24/react-canvas';
+import { CanvasComponent, Rect, ButtonTypes } from '@bucky24/react-canvas';
 
 import { Layer, Background } from './shapes';
 
@@ -19,10 +19,14 @@ const propTypes = {
     offMapBackground: Background, 
     xOff: PropTypes.number,
     yOff: PropTypes.number,
+    onMove: PropTypes.func,
+    onClick: PropTypes.func,
 };
 
 const defaultProps = {
-    layers: []
+    layers: [],
+    onMove: () => {},
+    onClick: () => {},
 };
 
 class Map extends CanvasComponent {
@@ -35,9 +39,41 @@ class Map extends CanvasComponent {
             mouseDown: false,
             mx: null,
             my: null,
+            mouseCell: {
+                x: null,
+                y: null,
+            }
         };
     }
+
+    handleDimensions() {
+        const { x, y, width, height } = this.props;
+
+        this.bounds = { x, y, width, height };
+    }
+
+    componentDidMount() {
+        super.componentDidMount();
+        this.handleDimensions();
+    }
+
+    componentDidUpdate() {
+        this.handleDimensions();
+    }
+
     onMouseMove({ x, y }, overMe) {
+        const cell = this.cellFromReal(x, y);
+
+        if (
+            overMe &&
+            (
+                cell.x !== this.state.mouseCell.x ||
+                cell.y !== this.state.mouseCell.y
+            )
+        ) {
+            this.props.onMove(cell.x, cell.y);
+        }
+
         if (this.state.mouseDown) {
             const dx = this.state.mx - x;
             const dy = this.state.my - y;
@@ -46,23 +82,57 @@ class Map extends CanvasComponent {
                 my: y,
                 xOff: this.state.xOff - dx,
                 yOff: this.state.yOff - dy,
+                mouseCell: cell,
             });
-        }
-    }
-    onMouseDown({ x, y, button }, overMe) {
-        if (overMe) {
+        } else {
             this.setState({
-                mouseDown: true,
                 mx: x,
                 my: y,
+                mouseCell: cell,
             });
         }
     }
+
+    onMouseDown({ x, y, button }, overMe) {
+        if (overMe && button === ButtonTypes.RIGHT) {
+            this.setState({
+                mouseDown: true,
+            });
+        }
+    }
+
     onMouseUp({ x, y, button }, overMe) {
         this.setState({
             mouseDown: false,
         });
+        if (button === ButtonTypes.LEFT) {
+            const cell = this.cellFromReal(x, y);
+            this.props.onClick(cell.x, cell.y);
+        }
     }
+
+    cellFromReal(rx, ry) {
+        const { x, y, width, height, cellSize } = this.props;
+        const { xOff, yOff } = this.state;
+
+        if (rx < x || ry < y || rx > x + width || ry > y + height) {
+            return {
+                x: null,
+                y: null,
+            };
+        }
+
+        const shiftX = rx - x - xOff;
+        const shiftY = ry - x - yOff;
+        const cellX = Math.floor(shiftX/cellSize);
+        const cellY = Math.floor(shiftY/cellSize);
+
+        return {
+            x: cellX,
+            y: cellY,
+        };
+    }
+
     render() {
         const { x, y, width, height, cellSize, layers, mapBackground, offMapBackground } = this.props;
         const { xOff, yOff } = this.state;
@@ -141,7 +211,6 @@ class Map extends CanvasComponent {
                     cellSize={cellSize}
                 />;
             }) }
-            
             <Rect
                 x={x}
                 y={y}

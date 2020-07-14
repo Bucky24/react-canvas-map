@@ -22,20 +22,18 @@ const MapLines = ({
             greatX = Math.min(x + width, greatX);
             leastY = Math.max(y, leastY);
             greatY = Math.min(y + height, greatY);
+            context.beginPath();
 
             for (let i=minCellX;i<=maxCellX;i++) {
-                context.beginPath();
                 const drawX = i*cellSize + xOff + x;
                 if (drawX < x || drawX > x + width) {
                     continue;
                 }
                 context.moveTo(drawX, leastY);                
                 context.lineTo(drawX, greatY);
-                context.stroke();
             }
 
             for (let i=minCellY;i<=maxCellY;i++) {
-                context.beginPath();
 
                 const drawY = i*cellSize + yOff + y;
                 if (drawY < y || drawY > y + height) {
@@ -43,9 +41,9 @@ const MapLines = ({
                 }
                 context.moveTo(leastX, drawY);
                 context.lineTo(greatX, drawY);
-                context.stroke();
             }
     
+            context.stroke();
             context.restore();
         }}
     </CanvasContext.Consumer>

@@ -12,10 +12,10 @@ function App() {
     const width = 500;
     const height = 400;
 	
-	const [selectedTile, setSelectedTile] = useState(null);
+	const [selectedTile, setSelectedTile] = useState({ x: 11, y: 3 });
 	const [mouseOverTile, setMouseOverTile] = useState(null);
 
-    return (
+    return (<div>
         <Canvas
             width={width}
             height={height}
@@ -26,8 +26,20 @@ function App() {
                 width={width-100}
                 height={height-100}
                 cellSize={30}
-                xOff={40}
-                yOff={40}
+                xOff={0}
+                yOff={0}
+                onMove={(x, y) => {
+                    setMouseOverTile({
+                        x,
+                        y,
+                    });
+                }}
+                onClick={(x, y) => {
+                    setSelectedTile({
+                        x,
+                        y,
+                    });
+                }}
                 offMapBackground={{
                     image: "http://pixelartmaker.com/art/98f98269b16f5d9.png",
                 }}
@@ -38,8 +50,8 @@ function App() {
                                 src: "https://www.rollingstone.com/wp-content/uploads/2018/06/foo-fighters-congrete-and-gold-review-9506116c-34b2-4619-bace-cf6df4db7bd9.jpg",
                                 cellWidth: 2,
                                 cellHeight: 1,
-                                cellX: 11,
-                                cellY: 3,
+                                cellX: selectedTile.x,
+                                cellY: selectedTile.y,
                             },
                             {
                                 src: GREEN_IMAGE,
@@ -144,7 +156,13 @@ function App() {
                 ]}
             />
         </Canvas>
-    );
+        <div>
+            Mouse over:&nbsp;
+            { mouseOverTile ? mouseOverTile.x : "None" }
+            &nbsp;/&nbsp;
+            { mouseOverTile ? mouseOverTile.y : "None" }
+        </div>
+    </div>);
 }
 
 export default App;
