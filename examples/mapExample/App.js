@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Canvas } from '@bucky24/react-canvas';
-import { Map } from "@bucky24/react-canvas-map";
+import { Map, MoveType } from "@bucky24/react-canvas-map";
 
 const GREEN_IMAGE = "https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-squares-01/3/33-512.png";
 const RED_IMAGE = "https://cdn5.vectorstock.com/i/1000x1000/09/29/arrow-in-square-icon-digital-red-vector-18320929.jpg";
@@ -28,6 +28,7 @@ function App() {
                 cellSize={30}
                 xOff={0}
                 yOff={0}
+                moveType={MoveType.KEYBOARD_ARROW}
                 onMove={(x, y) => {
                     setMouseOverTile({
                         x,

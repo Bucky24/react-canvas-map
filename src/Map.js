@@ -8,6 +8,11 @@ import MapLines from './MapLines';
 import MapLayer from './MapLayer';
 import MapBackground from './MapBackground';
 
+export const MoveType = {
+    MOUSE: "mouse",
+    KEYBOARD_ARROW: "keyboard_arrow",
+};
+
 const propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
@@ -21,12 +26,14 @@ const propTypes = {
     yOff: PropTypes.number,
     onMove: PropTypes.func,
     onClick: PropTypes.func,
+    moveType: PropTypes.oneOf(Object.values(MoveType)),
 };
 
 const defaultProps = {
     layers: [],
     onMove: () => {},
     onClick: () => {},
+    moveType: MoveType.MOUSE,
 };
 
 class Map extends CanvasComponent {
@@ -74,7 +81,7 @@ class Map extends CanvasComponent {
             this.props.onMove(cell.x, cell.y);
         }
 
-        if (this.state.mouseDown) {
+        if (this.state.mouseDown && this.props.moveType === MoveType.MOUSE) {
             const dx = this.state.mx - x;
             const dy = this.state.my - y;
             this.setState({
@@ -90,6 +97,29 @@ class Map extends CanvasComponent {
                 my: y,
                 mouseCell: cell,
             });
+        }
+    }
+
+    onKeyDown({ code }) {
+        if (this.props.moveType === MoveType.KEYBOARD_ARROW) {
+            if (code === "ArrowLeft") {
+                this.setState({
+                    xOff: this.state.xOff + 5,
+                });
+            } else if (code === "ArrowRight") {
+                this.setState({
+                    xOff: this.state.xOff - 5,
+                });
+            }
+            if (code === "ArrowUp") {
+                this.setState({
+                    yOff: this.state.yOff + 5,
+                });
+            } else if (code === "ArrowDown") {
+                this.setState({
+                    yOff: this.state.yOff - 5,
+                });
+            }
         }
     }
 
