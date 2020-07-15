@@ -167,6 +167,8 @@ class Map extends CanvasComponent {
         const { x, y, width, height, cellSize, layers, mapBackground, offMapBackground } = this.props;
         const { xOff, yOff } = this.state;
 
+        console.log("rendering", this.context);
+
         this.bounds = {
             x,
             y,

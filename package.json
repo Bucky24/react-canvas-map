@@ -6,7 +6,8 @@
 	"scripts": {
 		"clean": "rm -rf build",
 		"build": "babel src --out-dir build",
-		"mapExample": "webpack-dev-server --config ./examples/mapExample/webpack.config.js"
+		"mapExample": "webpack-dev-server --config ./examples/mapExample/webpack.config.js",
+		"publish": "npm run build && npm publish --access=public"
 	},
 	"repository": {
 		"type": "git",
@@ -17,6 +18,9 @@
 		"canvas",
 		"map",
 		"2d"
+	],
+	"files": [
+		"build"
 	],
 	"author": "Bucky24",
 	"license": "MIT",

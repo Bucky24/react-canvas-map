@@ -46,4 +46,50 @@ This component contains a large number of options for the given map that you wan
 
 ### MapLayer
 
-The MapLayer object defines a layer of various objects that need to be drawn. MapLayers are drawn in order, so the first layer is drawn first, and the last layer is drawn last. You can use this to ensure that you get a proper z-depth for your map.
+The MapLayer object defines a layer of various objects that need to be drawn. MapLayers are drawn in order, so the first layer is drawn first, and the last layer is drawn last. You can use this to ensure that you get a proper z-depth for your map. MapLayers have the following keys:
+
+| Param | Description | Required |
+| -- | -- | -- |
+| images | List of Image objects | No |
+| text | List of Text objects | No |
+
+Note that this means a single layer can have multiple images, multiple text strings, or both.
+
+### Image
+
+The Image object defines an image as well as information on how to draw or position the image.
+
+| Param | Description | Required |
+| -- | -- | -- |
+| src | Either a URL or base64 encoded string with image data | Yes |
+| cellWidth | How many cells the image takes up horizontally (can be fractional) | Yes |
+| cellHeight | How many cells the image takes up vertically (can be fractional) | Yes |
+| cellX | The x position of the cell to draw the image at | Yes |
+| cellY | The y position of the cell to draw the image at | Yes |
+| xOff | Setting this will shift the image horizontally from the cell x. Can be fractional. | No |
+| yOff | Setting this will shift the image vertically from the cell y. Can be fractional. | No |
+| rot | Indicates how much the image should be rotated, if at all | No |
+
+### Text
+
+The Text object defines a string of text as well as information on how to draw the text.
+
+| Param | Description | Required |
+| -- | -- | -- |
+| text | The text to draw | Yes |
+| cellX | The x position of the cell to draw the text at | Yes |
+| cellY | The y position of the cell to draw the text at | Yes |
+| vAlign | The vertical alignment of the text. One of "top", "center", "bottom" | No |
+| hAlign | The horizontal alignment of the text. One of "left", "center", "right" | No |
+| font | The font of the text to draw | Yes
+
+### MapBackground
+
+The MapBackground object defines a background.
+
+| Param | Description | Required |
+| -- | -- |
+| color | A hex color code to fill a solid color background | No |
+| image | An image url or base 64 string to fill an image background | No |
+
+Note that either color or image is expected to be set.
