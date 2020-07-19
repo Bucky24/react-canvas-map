@@ -28,7 +28,7 @@ function App() {
                 cellSize={30}
                 xOff={0}
                 yOff={0}
-                moveType={MoveType.KEYBOARD_ARROW}
+                moveType={MoveType.MOUSE}
                 onMove={(x, y) => {
                     setMouseOverTile({
                         x,

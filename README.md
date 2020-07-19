@@ -88,8 +88,17 @@ The Text object defines a string of text as well as information on how to draw t
 The MapBackground object defines a background.
 
 | Param | Description | Required |
-| -- | -- |
+| -- | -- | -- |
 | color | A hex color code to fill a solid color background | No |
 | image | An image url or base 64 string to fill an image background | No |
 
 Note that either color or image is expected to be set.
+
+### MoveType
+
+MoveType is also exported from the module. It is an enum with the following types:
+
+| Type | Description |
+| -- | -- |
+| MOUSE | Use the mouse for panning the map |
+| KEYBOARD_ARROW | Use arrow keys for panning the map |
