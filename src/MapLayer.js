@@ -1,10 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import {
-    Images,
-    CanvasComponent,
-    Clip,
- } from '@bucky24/react-canvas';
+import { Images, Image, Clip, renderToImage } from '@bucky24/react-canvas';
+import useDeepCompareEffect from 'use-deep-compare-effect';
 
 import {
     Layer,
@@ -20,15 +17,15 @@ const propTypes = {
     xOff: PropTypes.number.isRequired,
     yOff: PropTypes.number.isRequired,
     cellSize: PropTypes.number.isRequired,
+    cellWidth: PropTypes.number.isRequired,
+    cellHeight: PropTypes.number.isRequired,
 }
 
-class MapLayer extends CanvasComponent {
-    cellToReal(cellX, cellY, cellWidth, cellHeight) {
-        const { x, y, xOff, yOff, cellSize } = this.props;
-
+const getComponents = ({ layer, cellSize }, onLoad) => {
+    const cellToReal = (cellX, cellY, cellWidth, cellHeight) => {
         const result = {
-            x: cellX * cellSize + x + xOff,
-            y: cellY * cellSize + y + yOff,
+            x: cellX * cellSize,
+            y: cellY * cellSize,
         };
 
         if (cellWidth) {
@@ -42,10 +39,10 @@ class MapLayer extends CanvasComponent {
         return result;
     }
 
-    getImage(imageData) {
+    const getImage = (imageData) => {
 		const { xOff, yOff, rot } = imageData;
 
-        const rect = this.cellToReal(
+        const rect = cellToReal(
             imageData.cellX + (xOff || 0),
             imageData.cellY + (yOff || 0),
             imageData.cellWidth,
@@ -59,72 +56,102 @@ class MapLayer extends CanvasComponent {
         };
     }
 
-    render() {
-        const { layer, x, y, width, height, cellSize, xOff, yOff } = this.props;
+    const components = [];
 
-        const components = [];
+    const images = [];
 
-        const images = [];
+    if (layer.images) {
+        for (let i=0;i<layer.images.length;i++) {
+            const imageData = layer.images[i];
 
-        if (layer.images) {
-            for (let i=0;i<layer.images.length;i++) {
-                const imageData = layer.images[i];
-
-                const image = this.getImage(imageData);
-                if (image) {
-                    images.push(image);
-                }
+            const image = getImage(imageData);
+            if (image) {
+                images.push(image);
             }
         }
-
-        const texts = [];
-        if (layer.text) {
-            for (let i=0;i<layer.text.length;i++) {
-                const textData = layer.text[i];
-
-                texts.push({
-                    text: textData.text,
-                    hAlign: textData.hAlign,
-                    vAlign: textData.vAlign,
-                    font: textData.font,
-                    cellX: textData.cellX,
-                    cellY:textData.cellY,
-                });
-            }
-        }
-
-        if (images.length > 0) {
-            components.push(<Images
-                key="images"
-                images={images}
-            />);
-        }
-
-        if (texts.length > 0) {
-            components.push(<MapText
-                key="text"
-                x={x}
-                y={y}
-                xOff={xOff}
-                yOff={yOff}
-                cellSize={cellSize}
-                texts={texts}
-            />);
-        }
-
-        if (components.length === 0) {
-            return null;
-        }
-
-        return <Clip
-            x={x}
-            y={y}
-            width={width}
-            height={height}
-        >
-            { components }
-        </Clip>;
     }
+
+    const texts = [];
+    if (layer.text) {
+        for (let i=0;i<layer.text.length;i++) {
+            const textData = layer.text[i];
+
+            texts.push({
+                text: textData.text,
+                hAlign: textData.hAlign,
+                vAlign: textData.vAlign,
+                font: textData.font,
+                cellX: textData.cellX,
+                cellY:textData.cellY,
+            });
+        }
+    }
+
+    if (images.length > 0) {
+        components.push(<Images
+            key="images"
+            images={images}
+            onLoad={onLoad}
+        />);
+    }
+
+    if (texts.length > 0) {
+        components.push(<MapText
+            key="text"
+            x={0}
+            y={0}
+            xOff={0}
+            yOff={0}
+            cellSize={cellSize}
+            texts={texts}
+        />);
+    }
+
+    return components;
+}
+
+const MapLayer = (props) => {
+    const { layer, x, y, width, height, xOff, yOff, cellSize, cellWidth, cellHeight } = props;
+    const [image, setImage] = useState(null);
+
+    const totalWidth = cellSize * cellWidth;
+    const totalHeight = cellSize * cellHeight;
+
+    const onImageLoad = () => {
+        setImage(null);
+    }
+
+    const rebuildImage = (components) => {
+        const image = renderToImage(components, totalWidth, totalHeight);
+        setImage(image);
+    }
+
+    useDeepCompareEffect(() => {
+        const components = getComponents(props, onImageLoad);
+        rebuildImage(components);
+    }, [layer, x, y, width, height, cellSize]);
+    
+    let components = [];
+    if (!image) {
+        components = getComponents(props, onImageLoad);
+        rebuildImage(components);
+    }
+
+    return <Clip
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+    >
+        { !image && components }
+        { image && <Image
+            src={image}
+            x={x+xOff}
+            y={y+yOff}
+            width={totalWidth}
+            height={totalHeight}
+        />}
+    </Clip>;
 }
 
 MapLayer.propTypes = propTypes;

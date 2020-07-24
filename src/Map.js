@@ -239,6 +239,8 @@ class Map extends CanvasComponent {
                     xOff={xOff}
                     yOff={yOff}
                     cellSize={cellSize}
+                    cellWidth={maxCellX}
+                    cellHeight={maxCellY}
                 />;
             }) }
             <Rect

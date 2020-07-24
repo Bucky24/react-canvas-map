@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Canvas } from '@bucky24/react-canvas';
 import { Map, MoveType } from "@bucky24/react-canvas-map";
 
-const GREEN_IMAGE = "https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-squares-01/3/33-512.png";
-const RED_IMAGE = "https://cdn5.vectorstock.com/i/1000x1000/09/29/arrow-in-square-icon-digital-red-vector-18320929.jpg";
-const BLUE_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Right-pointing_white_arrow_in_blue_rounded_square.svg/512px-Right-pointing_white_arrow_in_blue_rounded_square.svg.png";
-const YELLOW_IMAGE = "https://previews.123rf.com/images/faysalfarhan/faysalfarhan1711/faysalfarhan171134535/89527541-next-arrow-icon-isolated-on-yellow-square-button-reflected-abstract-illustration.jpg";
-
+import GREEN_IMAGE from "./images/green.png";
+import RED_IMAGE from "./images/red.jpg";
+import BLUE_IMAGE from "./images/blue.png";
+import YELLOW_IMAGE from "./images/yellow.jpg";
+import BACKGROUND from "./images/background.png";
 
 function App() {
     const width = 500;
@@ -42,13 +42,13 @@ function App() {
                     });
                 }}
                 offMapBackground={{
-                    image: "http://pixelartmaker.com/art/98f98269b16f5d9.png",
+                    image: BACKGROUND,
                 }}
                 layers={[
                     {
                         images: [
                             {
-                                src: "https://www.rollingstone.com/wp-content/uploads/2018/06/foo-fighters-congrete-and-gold-review-9506116c-34b2-4619-bace-cf6df4db7bd9.jpg",
+                                src: GREEN_IMAGE,
                                 cellWidth: 2,
                                 cellHeight: 1,
                                 cellX: selectedTile.x,
