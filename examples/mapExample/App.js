@@ -41,8 +41,8 @@ function App() {
                         y,
                     });
                 }}
-                offMapBackground={{
-                    image: BACKGROUND,
+                mapBackground={{
+                    color: "#0a0",
                 }}
                 layers={[
                     {

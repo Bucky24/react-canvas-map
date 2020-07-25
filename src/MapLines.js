@@ -18,10 +18,11 @@ const MapLines = ({
             let leastY = minCellY * cellSize + yOff + y;
             let greatY = maxCellY * cellSize + yOff + y;
 
-            leastX = Math.max(x, leastX);
-            greatX = Math.min(x + width, greatX);
-            leastY = Math.max(y, leastY);
-            greatY = Math.min(y + height, greatY);
+            leastX = Math.min(x + width, Math.max(x, leastX));
+            greatX = Math.max(x, Math.min(x + width, greatX));
+            leastY = Math.min(y + height, Math.max(y, leastY));
+            greatY = Math.max(y, Math.min(y + height, greatY));
+
             context.beginPath();
 
             for (let i=minCellX;i<=maxCellX;i++) {

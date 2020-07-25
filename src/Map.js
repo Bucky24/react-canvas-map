@@ -206,28 +206,16 @@ class Map extends CanvasComponent {
             />
             { mapBackground && <MapBackground
                 background={mapBackground}
-                x={Math.max(x, x+xOff)}
-                y={Math.max(y, y+yOff)}
-                width={width}
-                height={height}
-                cellSize={cellSize}
-                xOff={0}
-                yOff={0}
-            />}
-            <MapLines
                 x={x}
                 y={y}
-                width={width}
-                height={height}
-                minCellX={0}
-                minCellY={0}
-                maxCellX={maxCellX}
-                maxCellY={maxCellY}
+                width={maxCellX*cellSize}
+                height={maxCellY*cellSize}
+                viewWidth={width}
+                viewHeight={height}
                 cellSize={cellSize}
-                color="#aaa"
                 xOff={xOff}
                 yOff={yOff}
-            />
+            />}
             { layers.map((layer, i) => {
                 return <MapLayer
                     key={`layer_${i}`}
@@ -243,6 +231,20 @@ class Map extends CanvasComponent {
                     cellHeight={maxCellY}
                 />;
             }) }
+            <MapLines
+                x={x}
+                y={y}
+                width={width}
+                height={height}
+                minCellX={0}
+                minCellY={0}
+                maxCellX={maxCellX}
+                maxCellY={maxCellY}
+                cellSize={cellSize}
+                color="#aaa"
+                xOff={xOff}
+                yOff={yOff}
+            />
             <Rect
                 x={x}
                 y={y}
