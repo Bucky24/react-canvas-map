@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CanvasComponent, Rect, ButtonTypes } from '@bucky24/react-canvas';
+import isEqual from 'react-fast-compare';
 
 import { Layer, Background } from './shapes';
 
@@ -68,6 +69,30 @@ class Map extends CanvasComponent {
         this.handleDimensions();
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        const propsEqual = isEqual(this.props, nextProps);
+        if (!propsEqual) {
+            return true;
+        }
+
+        // filter out mx, my, mouseCell, because those change
+        // when the mouse is moved and there's really no need to
+        /// re-render then
+        const stateEqual = isEqual({
+            ...this.state,
+            mx: null,
+            my: null,
+            mouseCell: null,
+        }, {
+            ...nextState,
+            mx: null,
+            my: null,
+            mouseCell: null,
+        });
+
+        return !stateEqual;
+    }
+
     onMouseMove({ x, y }, overMe) {
         const cell = this.cellFromReal(x, y);
 
@@ -123,7 +148,7 @@ class Map extends CanvasComponent {
         }
     }
 
-    onMouseDown({ x, y, button }, overMe) {
+    onMouseDown({ button }, overMe) {
         if (overMe && button === ButtonTypes.RIGHT) {
             this.setState({
                 mouseDown: true,
@@ -135,10 +160,10 @@ class Map extends CanvasComponent {
         this.setState({
             mouseDown: false,
         });
-        if (button === ButtonTypes.LEFT) {
+        if (button === ButtonTypes.LEFT && overMe) {
             const cell = this.cellFromReal(x, y);
             this.props.onClick(cell.x, cell.y);
-        }
+                    }
     }
 
     cellFromReal(rx, ry) {
@@ -229,6 +254,9 @@ class Map extends CanvasComponent {
                     cellSize={cellSize}
                     cellWidth={maxCellX}
                     cellHeight={maxCellY}
+                    rerender={() => {
+                        this.context.forceRerender();
+                    }}
                 />;
             }) }
             <MapLines

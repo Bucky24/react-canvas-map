@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Images, Image, Clip, renderToImage } from '@bucky24/react-canvas';
+import {
+    Images,
+    Image,
+    Clip,
+    renderToImage,
+} from '@bucky24/react-canvas';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 
 import {
@@ -111,30 +116,43 @@ const getComponents = ({ layer, cellSize }, onLoad) => {
 }
 
 const MapLayer = (props) => {
-    const { layer, x, y, width, height, xOff, yOff, cellSize, cellWidth, cellHeight } = props;
-    const [image, setImage] = useState(null);
+    const {
+        layer,
+        x,
+        y,
+        width,
+        height,
+        xOff,
+        yOff,
+        cellSize,
+        cellWidth,
+        cellHeight,
+        rerender,
+    } = props;
+    const imageRef = useRef(null);
 
     const totalWidth = cellSize * cellWidth;
     const totalHeight = cellSize * cellHeight;
 
     const onImageLoad = () => {
-        setImage(null);
+        const components = getComponents(props, onImageLoad);
+        rebuildImage(components);
     }
 
-    const rebuildImage = (components) => {
+    const rebuildImage = (components, doRender=true) => {
         const image = renderToImage(components, totalWidth, totalHeight);
-        setImage(image);
+        imageRef.current = image;
+        if (doRender) rerender();
     }
 
     useDeepCompareEffect(() => {
-        const components = getComponents(props, onImageLoad);
+        const components = getComponents(props);
         rebuildImage(components);
     }, [layer, x, y, width, height, cellSize]);
-    
-    let components = [];
-    if (!image) {
-        components = getComponents(props, onImageLoad);
-        rebuildImage(components);
+
+    if (!imageRef.current) {
+        const components = getComponents(props, onImageLoad);
+        rebuildImage(components, false);
     }
 
     return <Clip
@@ -143,9 +161,8 @@ const MapLayer = (props) => {
         width={width}
         height={height}
     >
-        { !image && components }
-        { image && <Image
-            src={image}
+        { imageRef.current && <Image
+            src={imageRef.current}
             x={x+xOff}
             y={y+yOff}
             width={totalWidth}
