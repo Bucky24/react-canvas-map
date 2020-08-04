@@ -34,7 +34,7 @@ This component contains a large number of options for the given map that you wan
 | y | Y coord where the map starts on the canvas | Yes |
 | width | Width in pixels of the map | Yes |
 | height | Height in pixels of the map | Yes |
-| cellSize | Size in pixels of each map cell | Yes |
+| cellSize | Size in pixels of each map cell (can be modified internally based on zoom level). Defaults to 25 | No |
 | xOff | Initial map horizontal offset | No |
 | yOff | Initial map vertical offset | No |
 | layers | List of MapLayer objects | No |
@@ -43,6 +43,12 @@ This component contains a large number of options for the given map that you wan
 | offMapBackground | MapBackground object, describes background for area that is not take up by the map | No |
 | onMove | Function, fires when mouse moves over a map cell | No |
 | onClick | Function, fires when move is clicked over a map cell | No |
+| zoom | Number that indicates the zoom level of the map. Used as initial value if zoomType is not NONE. 100 is default zoom (100% zoom) | No |
+| zoomType | One of the ZoomType etnries. Determines how the map is zoomed. Defaults to MOUSE | No |
+| minCellX | The cell x at which the map will start drawing cells. Defaults 0 | No |
+| minCellY | The cell y at which the map will start drawing cells. Defaults 0 | No |
+| maxCellX | The cell x at which the map will stop drawing cells (inclusive). Defaults 20 | No |
+| maxCellY | The cell y at which the map will stop drawing cells (inclusive). Defaults 20 | No |
 
 ### MapLayer
 
@@ -102,3 +108,13 @@ MoveType is also exported from the module. It is an enum with the following type
 | -- | -- |
 | MOUSE | Use the mouse for panning the map |
 | KEYBOARD_ARROW | Use arrow keys for panning the map |
+| NONE | No map panning will be done by the component |
+
+### ZoomType
+
+ZoomType is also exported from the module. It is an enum with the following types:
+
+| Type | Description |
+| -- | -- |
+| MOUSE | Use the mouse wheel for zooming the map |
+| NONE | No zoom will be done by the component |

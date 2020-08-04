@@ -6,26 +6,30 @@ import { Background } from './shapes';
 
 const propTypes = {
     background: Background.isRequired,
-    x: PropTypes.number.isRequired,
-    y: PropTypes.number.isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
+    viewX: PropTypes.number.isRequired,
+    viewY: PropTypes.number.isRequired,
+    maxX: PropTypes.number.isRequired,
+    maxY: PropTypes.number.isRequired,
     cellSize: PropTypes.number.isRequired,
     xOff: PropTypes.number.isRequired,
     yOff: PropTypes.number.isRequired,
+    minX: PropTypes.number.isRequired,
+    minY: PropTypes.number.isRequired,
 };
 
 const MapBackground = ({
     background,
-    x,
-    y,
-    width,
-    height,
+    viewX,
+    viewY,
+    maxX,
+    maxY,
     cellSize,
     xOff,
     yOff,
     viewWidth,
     viewHeight,
+    minX,
+    minY,
 }) => {
     return <CanvasContext.Consumer>
         {({ context, getImage, forceRerender }) => {
@@ -36,17 +40,17 @@ const MapBackground = ({
 
             const { color, image } = background;
 
-            const screenX = x + viewWidth;
-            const screenY = y + viewHeight;
-            const bottomX = x + xOff;
-            const bottomY = y + yOff;
-            const topX = bottomX + width;
-            const topY = bottomY + height;
+            const screenTopX = viewX + viewWidth;
+            const screenTopY = viewY + viewHeight;
+            const drawBotX = minX + xOff + viewX;
+            const drawBotY = minY + yOff + viewY;
+            const drawTopX = maxX + xOff + viewX;
+            const drawTopY = maxY + yOff + viewY;
 
-            const finalBotX = Math.max(x, x+xOff);
-            const finalBotY = Math.max(y, y+yOff);
-            const finalTopX = Math.min(screenX, topX);
-            const finalTopY = Math.min(screenY, topY);
+            const finalBotX = Math.max(viewX, Math.min(screenTopX, drawBotX));
+            const finalBotY = Math.max(viewY, Math.min(screenTopY, drawBotY));
+            const finalTopX = Math.max(viewX, Math.min(screenTopX, drawTopX));
+            const finalTopY = Math.max(viewY, Math.min(screenTopY, drawTopY));
     
             let finalWidth = Math.max(0, finalTopX - finalBotX);
             let finalHeight = Math.max(0, finalTopY - finalBotY);
@@ -60,7 +64,7 @@ const MapBackground = ({
                 const img = getImage(image, forceRerender);
 
                 if (img) {
-                    context.rect(x,y,width,height);
+                    context.rect(viewX,viewY,width,height);
                     context.clip();
 
                     // https://stackoverflow.com/questions/33337346/canvas-resize-image-object-and-repeat-pattern

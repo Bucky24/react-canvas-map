@@ -28,6 +28,10 @@ function App() {
                 cellSize={30}
                 xOff={0}
                 yOff={0}
+                minCellX={-5}
+                minCellY={-5}
+                maxCellX={15}
+                maxCellY={30}
                 moveType={MoveType.MOUSE}
                 onMove={(x, y) => {
                     setMouseOverTile({

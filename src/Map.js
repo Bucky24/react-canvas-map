@@ -10,8 +10,14 @@ import MapLayer from './MapLayer';
 import MapBackground from './MapBackground';
 
 export const MoveType = {
-    MOUSE: "mouse",
-    KEYBOARD_ARROW: "keyboard_arrow",
+    MOUSE: "move_mouse",
+    KEYBOARD_ARROW: "move_keyboard_arrow",
+    NONE: "move_none",
+};
+
+export const ZoomType = {
+    MOUSE: "zoom_mouse",
+    NONE: "zoom_none",
 };
 
 const propTypes = {
@@ -28,6 +34,12 @@ const propTypes = {
     onMove: PropTypes.func,
     onClick: PropTypes.func,
     moveType: PropTypes.oneOf(Object.values(MoveType)),
+    zoomType: PropTypes.oneOf(Object.values(ZoomType)),
+    zoom: PropTypes.number,
+    minCellX: PropTypes.number,
+    minCellY: PropTypes.number,
+    maxCellX: PropTypes.number,
+    maxCellY: PropTypes.number,
 };
 
 const defaultProps = {
@@ -35,6 +47,12 @@ const defaultProps = {
     onMove: () => {},
     onClick: () => {},
     moveType: MoveType.MOUSE,
+    zoomType: ZoomType.MOUSE,
+    minCellX: 0,
+    minCellY: 0,
+    maxCellX: 20,
+    maxCellY: 20,
+    cellSize: 25,
 };
 
 class Map extends CanvasComponent {
@@ -42,15 +60,16 @@ class Map extends CanvasComponent {
         super(props);
 
         this.state = {
-            xOff: props.xOff || 0,
-            yOff: props.yOff || 0,
+            xOff: null,
+            yOff: null,
             mouseDown: false,
             mx: null,
             my: null,
             mouseCell: {
                 x: null,
                 y: null,
-            }
+            },
+            zoom: null,
         };
     }
 
@@ -96,6 +115,9 @@ class Map extends CanvasComponent {
     onMouseMove({ x, y }, overMe) {
         const cell = this.cellFromReal(x, y);
 
+        const xOff = this.state.xOff || this.props.xOff || 0;
+        const yOff = this.state.yOff || this.props.yOff || 0;
+
         if (
             overMe &&
             (
@@ -112,8 +134,8 @@ class Map extends CanvasComponent {
             this.setState({
                 mx: x,
                 my: y,
-                xOff: this.state.xOff - dx,
-                yOff: this.state.yOff - dy,
+                xOff: xOff - dx,
+                yOff: yOff - dy,
                 mouseCell: cell,
             });
         } else {
@@ -163,12 +185,37 @@ class Map extends CanvasComponent {
         if (button === ButtonTypes.LEFT && overMe) {
             const cell = this.cellFromReal(x, y);
             this.props.onClick(cell.x, cell.y);
-                    }
+        }
+    }
+
+    onWheel({ up }, overMe) {
+        if (!overMe) {
+            return;
+        }
+
+        let delta = 10;
+
+        if (!up) {
+            delta = -delta;
+        }
+
+        const zoom = this.state.zoom || this.props.zoom || 100;
+
+        let newZoom = zoom + delta;
+        newZoom = Math.min(200, Math.max(10, newZoom));
+        this.setState({
+            zoom: newZoom,
+        });
     }
 
     cellFromReal(rx, ry) {
         const { x, y, width, height, cellSize } = this.props;
-        const { xOff, yOff } = this.state;
+        const xOff = this.state.xOff || this.props.xOff || 0;
+        const yOff = this.state.yOff || this.props.yOff || 0;       
+        const zoom = this.state.zoom || this.props.zoom || 100;
+
+        const zoomUnit = Math.abs(zoom) / 100;
+        const realCellSize = cellSize * zoomUnit;
 
         if (rx < x || ry < y || rx > x + width || ry > y + height) {
             return {
@@ -179,8 +226,8 @@ class Map extends CanvasComponent {
 
         const shiftX = rx - x - xOff;
         const shiftY = ry - x - yOff;
-        const cellX = Math.floor(shiftX/cellSize);
-        const cellY = Math.floor(shiftY/cellSize);
+        const cellX = Math.floor(shiftX/realCellSize);
+        const cellY = Math.floor(shiftY/realCellSize);
 
         return {
             x: cellX,
@@ -189,8 +236,13 @@ class Map extends CanvasComponent {
     }
 
     render() {
-        const { x, y, width, height, cellSize, layers, mapBackground, offMapBackground } = this.props;
-        const { xOff, yOff } = this.state;
+        const { x, y, width, height, cellSize, layers, mapBackground, offMapBackground, minCellX, minCellY, maxCellX, maxCellY } = this.props;
+        const xOff = this.state.xOff || this.props.xOff || 0;
+        const yOff = this.state.yOff || this.props.yOff || 0;
+        const zoom = this.state.zoom || this.props.zoom || 100;
+
+        const zoomUnit = Math.abs(zoom) / 100;
+        const realCellSize = cellSize * zoomUnit;
 
         this.bounds = {
             x,
@@ -198,9 +250,6 @@ class Map extends CanvasComponent {
             width,
             height,
         };
-
-        const maxCellX = 20;
-        const maxCellY = 20;
 
         return <>
             <Rect
@@ -213,31 +262,35 @@ class Map extends CanvasComponent {
             />
             { offMapBackground && <MapBackground
                 background={offMapBackground}
-                x={x}
-                y={y}
-                width={width}
-                height={height}
-                cellSize={cellSize}
+                minX={minCellX*realCellSize}
+                minY={minCellY*realCellSize}
+                viewX={x}
+                viewY={y}
+                maxX={maxCellX*realCellSize}
+                maxY={maxCellY*realCellSize}
+                cellSize={realCellSize}
                 xOff={xOff}
                 yOff={yOff}
             />}
             <Rect
                 x={Math.max(x, x+xOff)}
                 y={Math.max(y, y+yOff)}
-                x2={Math.min(x+width, x+xOff+cellSize*maxCellX)}
-                y2={Math.min(y+height, y+yOff+cellSize*maxCellY)}
+                x2={Math.min(x+width, x+xOff+realCellSize*maxCellX)}
+                y2={Math.min(y+height, y+yOff+realCellSize*maxCellY)}
                 color="#fff"
                 fill={true}
             />
             { mapBackground && <MapBackground
                 background={mapBackground}
-                x={x}
-                y={y}
-                width={maxCellX*cellSize}
-                height={maxCellY*cellSize}
+                minX={minCellX*realCellSize}
+                minY={minCellY*realCellSize}
+                viewX={x}
+                viewY={y}
+                maxX={maxCellX*realCellSize}
+                maxY={maxCellY*realCellSize}
                 viewWidth={width}
                 viewHeight={height}
-                cellSize={cellSize}
+                cellSize={realCellSize}
                 xOff={xOff}
                 yOff={yOff}
             />}
@@ -251,7 +304,7 @@ class Map extends CanvasComponent {
                     height={height}
                     xOff={xOff}
                     yOff={yOff}
-                    cellSize={cellSize}
+                    cellSize={realCellSize}
                     cellWidth={maxCellX}
                     cellHeight={maxCellY}
                     rerender={() => {
@@ -264,11 +317,11 @@ class Map extends CanvasComponent {
                 y={y}
                 width={width}
                 height={height}
-                minCellX={0}
-                minCellY={0}
+                minCellX={minCellX}
+                minCellY={minCellY}
                 maxCellX={maxCellX}
                 maxCellY={maxCellY}
-                cellSize={cellSize}
+                cellSize={realCellSize}
                 color="#aaa"
                 xOff={xOff}
                 yOff={yOff}

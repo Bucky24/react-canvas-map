@@ -142,7 +142,11 @@ const MapLayer = (props) => {
     const rebuildImage = (components, doRender=true) => {
         const image = renderToImage(components, totalWidth, totalHeight);
         imageRef.current = image;
-        if (doRender) rerender();
+        if (doRender) {
+            setTimeout(() => {
+                rerender();
+            }, 1);
+        }
     }
 
     useDeepCompareEffect(() => {
