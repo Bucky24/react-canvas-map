@@ -49,6 +49,7 @@ This component contains a large number of options for the given map that you wan
 | minCellY | The cell y at which the map will start drawing cells. Defaults 0 | No |
 | maxCellX | The cell x at which the map will stop drawing cells (inclusive). Defaults 20 | No |
 | maxCellY | The cell y at which the map will stop drawing cells (inclusive). Defaults 20 | No |
+| renderLayersToImage | Flag that determines if layers are pre-rendered to images. This can optimize performance but may not work correctly. Defaults false | No |
 
 ### MapLayer
 

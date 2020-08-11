@@ -1,12 +1,13 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
     Images,
     Image,
     Clip,
-    renderToImage,
+    renderToCanvas,
+    CanvasComponent,
 } from '@bucky24/react-canvas';
-import useDeepCompareEffect from 'use-deep-compare-effect';
+import isEqual from 'react-fast-compare';
 
 import {
     Layer,
@@ -24,9 +25,10 @@ const propTypes = {
     cellSize: PropTypes.number.isRequired,
     cellWidth: PropTypes.number.isRequired,
     cellHeight: PropTypes.number.isRequired,
+    forceRenderCount: PropTypes.number.isRequired,
 }
 
-const getComponents = ({ layer, cellSize }, onLoad) => {
+const getComponents = ({ layer, cellSize, xOff: viewX, yOff: viewY, x, y, renderAsImage }, { minXOff, minYOff }) => {
     const cellToReal = (cellX, cellY, cellWidth, cellHeight) => {
         const result = {
             x: cellX * cellSize,
@@ -53,6 +55,14 @@ const getComponents = ({ layer, cellSize }, onLoad) => {
             imageData.cellWidth,
             imageData.cellHeight,
         );
+
+        if (!renderAsImage) {
+            rect.x += (viewX || 0) + x;
+            rect.y += (viewY || 0) + y;
+        } else {
+            rect.x -= minXOff;
+            rect.y -= minYOff;
+        }
 
         return {
             src: imageData.src,
@@ -96,17 +106,16 @@ const getComponents = ({ layer, cellSize }, onLoad) => {
         components.push(<Images
             key="images"
             images={images}
-            onLoad={onLoad}
         />);
     }
 
     if (texts.length > 0) {
         components.push(<MapText
             key="text"
-            x={0}
-            y={0}
-            xOff={0}
-            yOff={0}
+            x={renderAsImage ? 0 : x}
+            y={renderAsImage ? 0 : y}
+            xOff={renderAsImage ? 0 : viewX}
+            yOff={renderAsImage ? 0 : viewY}
             cellSize={cellSize}
             texts={texts}
         />);
@@ -115,64 +124,153 @@ const getComponents = ({ layer, cellSize }, onLoad) => {
     return components;
 }
 
-const MapLayer = (props) => {
-    const {
-        layer,
-        x,
-        y,
-        width,
-        height,
-        xOff,
-        yOff,
-        cellSize,
-        cellWidth,
-        cellHeight,
-        rerender,
-    } = props;
-    const imageRef = useRef(null);
+class MapLayer extends CanvasComponent {
+    constructor(props) {
+        super(props);
 
-    const totalWidth = cellSize * cellWidth;
-    const totalHeight = cellSize * cellHeight;
-
-    const onImageLoad = () => {
-        const components = getComponents(props, onImageLoad);
-        rebuildImage(components);
+        this.imageRef = null;
+        this.lastProps = null;
     }
 
-    const rebuildImage = (components, doRender=true) => {
-        const image = renderToImage(components, totalWidth, totalHeight);
-        imageRef.current = image;
-        if (doRender) {
-            setTimeout(() => {
-                rerender();
-            }, 1);
+    getLayerDims() {
+        const { renderAsImage, layer, cellSize } = this.props;
+
+        let minXOff = 0;
+        let minYOff = 0;
+        let maxXOff = 0;
+        let maxYOff = 0;
+        if (renderAsImage) {
+            let minX = 0;
+            let minY = 0;
+            let maxX = 0;
+            let maxY = 0;
+    
+            if (layer.images) {
+                layer.images.forEach(({ cellX, cellY, cellWidth, cellHeight }) => {
+                    minX = Math.min(cellX, minX);
+                    minY = Math.min(cellY, minY);
+                    maxX = Math.max(cellX+cellWidth, maxX);
+                    maxY = Math.max(cellY+cellHeight, maxY);
+                });
+            }
+
+            if (layer.text) {
+                layer.text.forEach(({ cellX, cellY }) => {
+                    minX = Math.min(cellX, minX);
+                    minY = Math.min(cellY, minY);
+                    maxX = Math.max(cellX, maxX);
+                    maxY = Math.max(cellY, maxY);
+                });
+            }
+    
+            minXOff = minX * cellSize;
+            minYOff = minY * cellSize;
+            maxXOff = maxX * cellSize;
+            maxYOff = maxY * cellSize;
         }
+
+        return {
+            minXOff,
+            minYOff,
+            maxXOff,
+            maxYOff,
+        };
     }
 
-    useDeepCompareEffect(() => {
-        const components = getComponents(props);
-        rebuildImage(components);
-    }, [layer, x, y, width, height, cellSize]);
+    render() {
+        const {
+            layer,
+            x,
+            y,
+            width,
+            height,
+            xOff,
+            yOff,
+            cellSize,
+            cellWidth,
+            cellHeight,
+            rerender,
+            minCellX,
+            minCellY,
+            renderAsImage,
+        } = this.props;
 
-    if (!imageRef.current) {
-        const components = getComponents(props, onImageLoad);
-        rebuildImage(components, false);
+        const layerDims = this.getLayerDims();
+        const {
+            minXOff,
+            minYOff,
+            maxXOff,
+            maxYOff,
+        } = layerDims;
+
+        const totalWidth = cellSize * (maxXOff-minXOff);
+        const totalHeight = cellSize * (maxYOff-minYOff);
+
+        let componentsToRender = null;
+        if (renderAsImage) {
+            const processedProps = {
+                ...this.props,
+                rerender: null,
+            };
+            const processedLastProps = {
+                ...this.lastProps,
+                rerender: null,
+            };
+            //const allPropsEqual = isEqual(processedProps, processedLastProps);
+            const moreProcessedProps = {
+                ...processedProps,
+                xOff: null,
+                yOff: null,
+            };
+            const moreProcessedLastProps = {
+                ...processedLastProps,
+                xOff: null,
+                yOff: null,
+            };
+            const propsEqual = isEqual(moreProcessedProps, moreProcessedLastProps);
+            const rendersEqual = processedProps.forceRenderCount === processedLastProps.forceRenderCount;
+
+            if (!propsEqual || !this.imageRef || !rendersEqual) {
+                this.imageRef = null;
+            } else {
+                componentsToRender = <Image
+                    src={this.imageRef}
+                    x={x+xOff+minXOff}
+                    y={y+yOff+minYOff}
+                    width={totalWidth}
+                    height={totalHeight}
+                />
+            }
+        }
+
+        if (!componentsToRender) {
+            const components = getComponents(this.props, layerDims);
+            if (renderAsImage) {
+                const image = renderToCanvas(components, totalWidth || 1, totalHeight || 1, this.context);
+                this.imageRef = image;
+                componentsToRender = <Image
+                    src={this.imageRef}
+                    x={x+xOff+minXOff}
+                    y={y+yOff+minYOff}
+                    width={totalWidth}
+                    height={totalHeight}
+                />
+            } else {
+                componentsToRender = components;
+            }
+        }
+
+        this.lastProps = this.props;
+
+        return <Clip
+            x={x}
+            y={y}
+            width={width}
+            height={height}
+        >
+            { componentsToRender }
+        </Clip>;
     }
-
-    return <Clip
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-    >
-        { imageRef.current && <Image
-            src={imageRef.current}
-            x={x+xOff}
-            y={y+yOff}
-            width={totalWidth}
-            height={totalHeight}
-        />}
-    </Clip>;
 }
 
 MapLayer.propTypes = propTypes;

@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Canvas } from '@bucky24/react-canvas';
 import { Map, MoveType } from "@bucky24/react-canvas-map";
 
-import GREEN_IMAGE from "./images/green.png";
+
 import RED_IMAGE from "./images/red.jpg";
 import BLUE_IMAGE from "./images/blue.png";
 import YELLOW_IMAGE from "./images/yellow.jpg";
 import BACKGROUND from "./images/background.png";
+
+const GREEN_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Green_Arrow_Up.svg/600px-Green_Arrow_Up.svg.png";
 
 function App() {
     const width = 500;
@@ -21,6 +23,7 @@ function App() {
             height={height}
         >
             <Map
+                renderLayersToImage={true}
                 x={50}
                 y={50}
                 width={width-100}
@@ -64,7 +67,7 @@ function App() {
                                 cellHeight: 0.5,
                                 cellX: 5,
                                 cellY: 2,
-                                rot: 0
+                                rot: 0,
                             },
                             {
                                 src: RED_IMAGE,

@@ -40,6 +40,7 @@ const propTypes = {
     minCellY: PropTypes.number,
     maxCellX: PropTypes.number,
     maxCellY: PropTypes.number,
+    renderLayersToImage: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -53,6 +54,7 @@ const defaultProps = {
     maxCellX: 20,
     maxCellY: 20,
     cellSize: 25,
+    renderLayersToImage: false,
 };
 
 class Map extends CanvasComponent {
@@ -237,6 +239,8 @@ class Map extends CanvasComponent {
 
     render() {
         const { x, y, width, height, cellSize, layers, mapBackground, offMapBackground, minCellX, minCellY, maxCellX, maxCellY } = this.props;
+        const { forceRenderCount } = this.context;
+
         const xOff = this.state.xOff || this.props.xOff || 0;
         const yOff = this.state.yOff || this.props.yOff || 0;
         const zoom = this.state.zoom || this.props.zoom || 100;
@@ -310,6 +314,10 @@ class Map extends CanvasComponent {
                     rerender={() => {
                         this.context.forceRerender();
                     }}
+                    minCellX={minCellX}
+                    minCellY={minCellY}
+                    renderAsImage={this.props.renderLayersToImage}
+                    forceRenderCount={forceRenderCount}
                 />;
             }) }
             <MapLines
