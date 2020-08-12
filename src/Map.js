@@ -201,13 +201,15 @@ class Map extends CanvasComponent {
             delta = -delta;
         }
 
-        const zoom = this.state.zoom || this.props.zoom || 100;
+        if (this.props.zoomType == ZoomType.MOUSE) {
+            const zoom = this.state.zoom || this.props.zoom || 100;
 
-        let newZoom = zoom + delta;
-        newZoom = Math.min(200, Math.max(10, newZoom));
-        this.setState({
-            zoom: newZoom,
-        });
+            let newZoom = zoom + delta;
+            newZoom = Math.min(200, Math.max(10, newZoom));
+            this.setState({
+                zoom: newZoom,
+            });
+        }
     }
 
     cellFromReal(rx, ry) {

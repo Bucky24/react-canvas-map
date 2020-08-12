@@ -203,8 +203,8 @@ class MapLayer extends CanvasComponent {
             maxYOff,
         } = layerDims;
 
-        const totalWidth = cellSize * (maxXOff-minXOff);
-        const totalHeight = cellSize * (maxYOff-minYOff);
+        const totalWidth = maxXOff-minXOff;
+        const totalHeight = maxYOff-minYOff;
 
         let componentsToRender = null;
         if (renderAsImage) {
