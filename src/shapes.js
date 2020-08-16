@@ -19,6 +19,16 @@ export const Layer = PropTypes.shape({
         hAlign: PropTypes.oneOf(["left", "center", "right"]),
         font: PropTypes.string.isRequired,
     })),
+    raw: PropTypes.shape({
+        cells: PropTypes.arrayOf(PropTypes.shape({
+            cellX: PropTypes.number.isRequired,
+            cellY: PropTypes.number.isRequired,
+            cellWidth: PropTypes.number.isRequired,
+            cellHeight: PropTypes.number.isRequired,
+            id: PropTypes.any,
+        })).isRequired,
+        drawFunc: PropTypes.func.isRequired,
+    }),
 });
 
 export const Background = PropTypes.shape({

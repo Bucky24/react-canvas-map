@@ -86,6 +86,31 @@ const getComponents = ({ layer, cellSize, xOff: viewX, yOff: viewY, x, y, render
         }
     }
 
+    let rawElements = []
+    if (layer.raw) {
+        const viewOffX = renderAsImage ? -minXOff : (viewX || 0) + x;
+        const viewOffY = renderAsImage ? -minYOff : (viewY || 0) + y;
+
+        const func = layer.raw.drawFunc;
+        for (const cell of layer.raw.cells) {
+            const { cellX, cellY, id, cellWidth, cellHeight } = cell;
+            let newElements = func({
+                x: cellX*cellSize + viewOffX,
+                y: cellY*cellSize + viewOffY,
+                width: cellWidth*cellSize,
+                height: cellHeight*cellSize,
+                id,
+            });
+            if (!Array.isArray(newElements)) {
+                newElements = [newElements];
+            }
+            rawElements = [
+                ...rawElements,
+                ...newElements,
+            ];
+        }
+    }
+
     const texts = [];
     if (layer.text) {
         for (let i=0;i<layer.text.length;i++) {
@@ -119,6 +144,10 @@ const getComponents = ({ layer, cellSize, xOff: viewX, yOff: viewY, x, y, render
             cellSize={cellSize}
             texts={texts}
         />);
+    }
+
+    for (const rawElement of rawElements) {
+        components.push(rawElement);
     }
 
     return components;
@@ -162,6 +191,20 @@ class MapLayer extends CanvasComponent {
                     maxY = Math.max(cellY, maxY);
                 });
             }
+
+            if (layer.raw) {
+                const viewOffX = renderAsImage ? -minXOff : (viewX || 0) + x;
+                const viewOffY = renderAsImage ? -minYOff : (viewY || 0) + y;
+        
+                const func = layer.raw.drawFunc;
+                for (const cell of layer.raw.cells) {
+                    const { cellX, cellY, id, cellWidth, cellHeight } = cell;
+                    minX = Math.min(cellX, minX);
+                    minY = Math.min(cellY, minY);
+                    maxX = Math.max(cellX+cellWidth, maxX);
+                    maxY = Math.max(cellY+cellHeight, maxY);
+                }
+            }
     
             minXOff = minX * cellSize;
             minYOff = minY * cellSize;
@@ -179,19 +222,12 @@ class MapLayer extends CanvasComponent {
 
     render() {
         const {
-            layer,
             x,
             y,
             width,
             height,
             xOff,
             yOff,
-            cellSize,
-            cellWidth,
-            cellHeight,
-            rerender,
-            minCellX,
-            minCellY,
             renderAsImage,
         } = this.props;
 

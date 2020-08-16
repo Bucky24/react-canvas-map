@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Canvas } from '@bucky24/react-canvas';
+import { Canvas, Rect } from '@bucky24/react-canvas';
 import { Map, MoveType } from "@bucky24/react-canvas-map";
 
 
@@ -160,6 +160,29 @@ function App() {
                                 vAlign: "center",
                             },
                         ]
+                    },
+                    {
+                        raw: {
+                            cells: [
+                                {
+                                    cellX: 5,
+                                    cellY: 5,
+                                    cellWidth: 2,
+                                    cellHeight: 1,
+                                    id: 'square'
+                                }
+                            ],
+                            drawFunc: ({ x, y, width, height, id }) => {
+                                return <Rect
+                                    x={x}
+                                    y={y}
+                                    x2={x+width}
+                                    y2={y+height}
+                                    color="#f00"
+                                    fill={true}
+                                />
+                            }
+                        }
                     }
                 ]}
             />

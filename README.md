@@ -59,6 +59,7 @@ The MapLayer object defines a layer of various objects that need to be drawn. Ma
 | -- | -- | -- |
 | images | List of Image objects | No |
 | text | List of Text objects | No |
+| raw | Raw object | no |
 
 Note that this means a single layer can have multiple images, multiple text strings, or both.
 
@@ -89,6 +90,39 @@ The Text object defines a string of text as well as information on how to draw t
 | vAlign | The vertical alignment of the text. One of "top", "center", "bottom" | No |
 | hAlign | The horizontal alignment of the text. One of "left", "center", "right" | No |
 | font | The font of the text to draw | Yes
+
+### Raw
+
+The Raw object determines how to draw a layer that is custom, allowing more complex things than just images and text to be drawn.
+
+| Param | Description | Required |
+| -- | -- | -- |
+| cells | List of CellItem objects | Yes |
+| drawFunc | A callback function that will be called once per cell given in the cells list. This function will be given a DrawFuncParams object as a parameter. This function should return either a single React element, or an array of React elements. Note that in the case where `renderLayersToImage` is not set or set to false, these elements must be something that can be handled by the Clip element from `@bucky24/react-canvas` |
+
+### CellItem
+
+An object that describes an item on the map
+
+| Param | Description | Required |
+| -- | -- | -- |
+| cellX | The x coord on the map of the item | Yes |
+| cellY | The y coord on the map of the item | Yes |
+| cellWidth | The width, in cells, of the item | Yes |
+| cellHeight | The height, in cells, of the item | Yes |
+| id | The id of the item. Can be literally anything so this can also be used for passthrough data if necessary. | No |
+
+### DrawFuncParams
+
+An object that is passed into the drawFunc for raw drawing on layers. Note that any coords or widths here are already adjusted for map offset, map x/y, and zoom.
+
+| Param | Description |
+| -- | -- |
+| x | The x coord on the canvas where this item begins |
+| y | The y coord on the canvas where this item begins |
+| width | The width, in pixels, of the item |
+| height | The height, in pixels, of the item |
+| id | The id of the item. Whatever was givenin the CellItem is passed through here. |
 
 ### MapBackground
 

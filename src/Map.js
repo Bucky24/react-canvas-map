@@ -186,7 +186,7 @@ class Map extends CanvasComponent {
         });
         if (button === ButtonTypes.LEFT && overMe) {
             const cell = this.cellFromReal(x, y);
-            this.props.onClick(cell.x, cell.y);
+            this.props.onClick(cell.x, cell.y, button);
         }
     }
 
