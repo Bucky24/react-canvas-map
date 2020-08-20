@@ -77,6 +77,7 @@ The Image object defines an image as well as information on how to draw or posit
 | xOff | Setting this will shift the image horizontally from the cell x. Can be fractional. | No |
 | yOff | Setting this will shift the image vertically from the cell y. Can be fractional. | No |
 | rot | Indicates how much the image should be rotated, if at all | No |
+| vAlign | The vertical alignment of the image. One of "top", "center", "bottom". Defaults "top" | No |
 
 ### Text
 

@@ -9,6 +9,8 @@ import {
 } from '@bucky24/react-canvas';
 import isEqual from 'react-fast-compare';
 
+import { VAlign, HAlign } from "./enums";
+
 import {
     Layer,
 } from './shapes';
@@ -47,7 +49,7 @@ const getComponents = ({ layer, cellSize, xOff: viewX, yOff: viewY, x, y, render
     }
 
     const getImage = (imageData) => {
-		const { xOff, yOff, rot } = imageData;
+		const { xOff, yOff, rot, vAlign } = imageData;
 
         const rect = cellToReal(
             imageData.cellX + (xOff || 0),
@@ -62,6 +64,12 @@ const getComponents = ({ layer, cellSize, xOff: viewX, yOff: viewY, x, y, render
         } else {
             rect.x -= minXOff;
             rect.y -= minYOff;
+        }
+
+        if (vAlign === VAlign.CENTER) {
+            rect.y -= rect.height/2 - cellSize/2;
+        } else if (vAlign === VAlign.BOTTOM) {
+            rect.y -= rect.height - cellSize;
         }
 
         return {
@@ -87,7 +95,7 @@ const getComponents = ({ layer, cellSize, xOff: viewX, yOff: viewY, x, y, render
     }
 
     let rawElements = []
-    if (layer.raw) {
+    if (layer.raw && layer.raw.drawFunc) {
         const viewOffX = renderAsImage ? -minXOff : (viewX || 0) + x;
         const viewOffY = renderAsImage ? -minYOff : (viewY || 0) + y;
 
@@ -175,11 +183,17 @@ class MapLayer extends CanvasComponent {
             let maxY = 0;
     
             if (layer.images) {
-                layer.images.forEach(({ cellX, cellY, cellWidth, cellHeight }) => {
+                layer.images.forEach(({ cellX, cellY, cellWidth, cellHeight, vAlign }) => {
                     minX = Math.min(cellX, minX);
                     minY = Math.min(cellY, minY);
                     maxX = Math.max(cellX+cellWidth, maxX);
                     maxY = Math.max(cellY+cellHeight, maxY);
+                    // not the most efficient, takes up more space than needed.
+                    if (vAlign === VAlign.CENTER) {
+                        minY = Math.min(cellY - cellHeight, minY);
+                    } else if (vAlign === VAlign.BOTTOM) {
+                        minY = Math.min(cellY - cellHeight, minY);
+                    }
                 });
             }
 
@@ -187,8 +201,8 @@ class MapLayer extends CanvasComponent {
                 layer.text.forEach(({ cellX, cellY }) => {
                     minX = Math.min(cellX, minX);
                     minY = Math.min(cellY, minY);
-                    maxX = Math.max(cellX, maxX);
-                    maxY = Math.max(cellY, maxY);
+                    maxX = Math.max(cellX+1, maxX);
+                    maxY = Math.max(cellY+1, maxY);
                 });
             }
 

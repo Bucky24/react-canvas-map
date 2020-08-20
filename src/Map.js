@@ -8,17 +8,7 @@ import { Layer, Background } from './shapes';
 import MapLines from './MapLines';
 import MapLayer from './MapLayer';
 import MapBackground from './MapBackground';
-
-export const MoveType = {
-    MOUSE: "move_mouse",
-    KEYBOARD_ARROW: "move_keyboard_arrow",
-    NONE: "move_none",
-};
-
-export const ZoomType = {
-    MOUSE: "zoom_mouse",
-    NONE: "zoom_none",
-};
+import { MoveType, ZoomType } from "./enums";
 
 const propTypes = {
     width: PropTypes.number.isRequired,
