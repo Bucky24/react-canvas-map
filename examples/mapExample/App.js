@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Canvas, Rect } from '@bucky24/react-canvas';
+import { Canvas, Rect, ButtonTypes } from '@bucky24/react-canvas';
 import { Map, MoveType, VAlign } from "@bucky24/react-canvas-map";
 
 
@@ -54,12 +54,15 @@ function App() {
                         y,
                     });
                 }}
-                onClick={(x, y) => {
-                    setSelectedTile({
-                        x,
-                        y,
-                    });
-                }}
+                onClick={(x, y, button) => {
+                    console.log(button, "button clicked!");
+                    if (button === ButtonTypes.LEFT)
+                        setSelectedTile({
+                            x,
+                            y,
+                        });
+                    }
+                }
                 mapBackground={{
                     color: "#0a0",
                 }}

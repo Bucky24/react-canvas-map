@@ -162,8 +162,8 @@ class Map extends CanvasComponent {
         }
     }
 
-    onMouseDown({ button }, overMe) {
-        if (overMe && button === ButtonTypes.RIGHT) {
+    onMouseDown(overMe) {
+        if (overMe) {
             this.setState({
                 mouseDown: true,
             });
@@ -174,7 +174,7 @@ class Map extends CanvasComponent {
         this.setState({
             mouseDown: false,
         });
-        if (button === ButtonTypes.LEFT && overMe) {
+        if (overMe) {
             const cell = this.cellFromReal(x, y);
             this.props.onClick(cell.x, cell.y, button);
         }
