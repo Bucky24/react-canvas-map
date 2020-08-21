@@ -219,7 +219,7 @@ class Map extends CanvasComponent {
         }
 
         const shiftX = rx - x - xOff;
-        const shiftY = ry - x - yOff;
+        const shiftY = ry - y - yOff;
         const cellX = Math.floor(shiftX/realCellSize);
         const cellY = Math.floor(shiftY/realCellSize);
 

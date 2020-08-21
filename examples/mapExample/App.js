@@ -36,7 +36,7 @@ function App() {
         >
             <Map
                 renderLayersToImage={true}
-                x={50}
+                x={100}
                 y={50}
                 width={width-100}
                 height={height-100}
