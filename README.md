@@ -41,8 +41,8 @@ This component contains a large number of options for the given map that you wan
 | moveType | One of the MoveType entries. Determines how the map can be panned. Defaults to MOUSE | No |
 | mapBackground | MapBackground object, describes background for the map | No |
 | offMapBackground | MapBackground object, describes background for area that is not take up by the map | No |
-| onMove | Function, fires when mouse moves over a map cell | No |
-| onClick | Function, fires when move is clicked over a map cell | No |
+| onMove | Function, fires when mouse moves over a map cell. First param is cell x, second is cell y. | No |
+| onClick | Function, fires when move is clicked over a map cell. First param is cell x, second is cell y. Third param is the button that was clicked (ButtonType from @bucky24/react-canvas) | No |
 | zoom | Number that indicates the zoom level of the map. Used as initial value if zoomType is not NONE. 100 is default zoom (100% zoom) | No |
 | zoomType | One of the ZoomType etnries. Determines how the map is zoomed. Defaults to MOUSE | No |
 | minCellX | The cell x at which the map will start drawing cells. Defaults 0 | No |
