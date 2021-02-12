@@ -9,6 +9,7 @@ import MapLines from './MapLines';
 import MapLayer from './MapLayer';
 import MapBackground from './MapBackground';
 import { MoveType, ZoomType } from "./enums";
+import { MapProvider } from './MapContext';
 
 const propTypes = {
     width: PropTypes.number.isRequired,
@@ -176,7 +177,7 @@ class Map extends CanvasComponent {
         });
         if (overMe) {
             const cell = this.cellFromReal(x, y);
-            this.props.onClick(cell.x, cell.y, button);
+            this.props.onClick(cell.x, cell.y, button, x, y);
         }
     }
 
@@ -230,7 +231,21 @@ class Map extends CanvasComponent {
     }
 
     render() {
-        const { x, y, width, height, cellSize, layers, mapBackground, offMapBackground, minCellX, minCellY, maxCellX, maxCellY } = this.props;
+        const {
+            x,
+            y,
+            width,
+            height,
+            cellSize,
+            layers,
+            mapBackground,
+            offMapBackground,
+            minCellX,
+            minCellY,
+            maxCellX,
+            maxCellY,
+            children,
+        } = this.props;
         const { forceRenderCount } = this.context;
 
         const xOff = this.state.xOff || this.props.xOff || 0;
@@ -312,6 +327,22 @@ class Map extends CanvasComponent {
                     forceRenderCount={forceRenderCount}
                 />;
             }) }
+            <MapProvider
+                xOff={xOff}
+                yOff={yOff}
+                cellSize={realCellSize}
+                cellWidth={maxCellX}
+                cellHeight={maxCellY}
+                minCellX={minCellX}
+                minCellY={minCellY}
+                x={x}
+                y={y}
+                width={width}
+                height={height}
+                forceRenderCount={forceRenderCount}
+            >
+                { children }
+            </MapProvider>
             <MapLines
                 x={x}
                 y={y}

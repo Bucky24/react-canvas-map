@@ -13,7 +13,7 @@ npm install --save @bucky24/react-canvas-map
 With Yarn
 
 ```
-npm install @bucky24/react-canvas-map
+yarn add @bucky24/react-canvas-map
 ```
 
 # Dependencies
@@ -26,7 +26,10 @@ This project exports a single component, Map, which must be embedded within a re
 
 This component contains a large number of options for the given map that you want to display. It is somewhat low level, and you will likely want to have an integration layer with the rest of your application.
 
-## Parameters
+## Map
+
+The Map component is the main component that sets up and draws the map.
+### Parameters
 
 | Param | Description | Required |
 | -- | -- | -- |
@@ -42,15 +45,60 @@ This component contains a large number of options for the given map that you wan
 | mapBackground | MapBackground object, describes background for the map | No |
 | offMapBackground | MapBackground object, describes background for area that is not take up by the map | No |
 | onMove | Function, fires when mouse moves over a map cell. First param is cell x, second is cell y. | No |
-| onClick | Function, fires when move is clicked over a map cell. First param is cell x, second is cell y. Third param is the button that was clicked (ButtonType from @bucky24/react-canvas) | No |
+| onClick | Function, fires when move is clicked over a map cell. `onClick(cellX, cellY, button, rawX, rawY)` button is a ButtonType from @bucky24/react-canvas). | No |
 | zoom | Number that indicates the zoom level of the map. Used as initial value if zoomType is not NONE. 100 is default zoom (100% zoom) | No |
-| zoomType | One of the ZoomType etnries. Determines how the map is zoomed. Defaults to MOUSE | No |
+| zoomType | One of the ZoomType entries. Determines how the map is zoomed. Defaults to MOUSE | No |
 | minCellX | The cell x at which the map will start drawing cells. Defaults 0 | No |
 | minCellY | The cell y at which the map will start drawing cells. Defaults 0 | No |
 | maxCellX | The cell x at which the map will stop drawing cells (inclusive). Defaults 20 | No |
 | maxCellY | The cell y at which the map will stop drawing cells (inclusive). Defaults 20 | No |
 | renderLayersToImage | Flag that determines if layers are pre-rendered to images. This can optimize performance but may not work correctly. Defaults false | No |
 
+## Layer
+
+The Layer component define a layer to be drawn to the map. Layers are drawn in order. It does not take any props, and expects zero or more Layer specific components (detailed below). This component must be placed as a child of a Map.
+
+## LayerImage
+
+This component details an image that should be drawn on a given layer.
+
+### Parameters
+
+| Param | Description | Required |
+| -- | -- | -- |
+| src | Either a URL or base64 encoded string with image data | Yes |
+| width | How many cells the image takes up horizontally (can be fractional) | Yes |
+| height | How many cells the image takes up vertically (can be fractional) | Yes |
+| x | The x position of the cell to draw the image at | Yes |
+| y | The y position of the cell to draw the image at | Yes |
+| xOff | Setting this will shift the image horizontally from the cell x. Can be fractional. | No |
+| yOff | Setting this will shift the image vertically from the cell y. Can be fractional. | No |
+| rot | Indicates how much the image should be rotated, if at all | No |
+| hAlign | The horizontal alignment of the image. One of HAlign. Defaults HAlign.LEFT | No |
+| vAlign | The vertical alignment of the image. One of VAlign. Defaults VAlign.TOP | No |
+
+## LayerText
+
+This component details text that should be drawn on a given layer.
+
+### Parameters
+
+| Param | Description | Required |
+| -- | -- | -- |
+| text | The text to draw | Yes |
+| x | The x position of the cell to draw the text at | Yes |
+| y | The y position of the cell to draw the text at | Yes |
+| vAlign | The vertical alignment of the text. One of "top", "center", "bottom" | No |
+| hAlign | The horizontal alignment of the text. One of "left", "center", "right" | No |
+| font | The font of the text to draw | Yes
+
+## LayerRaw
+
+This component details a way to free-form draw on a layer. See [Raw](#Raw) for more details. Note there can only be 1 LayerRaw per layer.
+
+# Manually Building Layers
+
+Manually building layers can be done by setting the `layers` property on the Map component. This may be slightly more efficient, but is less React-like.
 ### MapLayer
 
 The MapLayer object defines a layer of various objects that need to be drawn. MapLayers are drawn in order, so the first layer is drawn first, and the last layer is drawn last. You can use this to ensure that you get a proper z-depth for your map. MapLayers have the following keys:
@@ -77,7 +125,8 @@ The Image object defines an image as well as information on how to draw or posit
 | xOff | Setting this will shift the image horizontally from the cell x. Can be fractional. | No |
 | yOff | Setting this will shift the image vertically from the cell y. Can be fractional. | No |
 | rot | Indicates how much the image should be rotated, if at all | No |
-| vAlign | The vertical alignment of the image. One of "top", "center", "bottom". Defaults "top" | No |
+| hAlign | The horizontal alignment of the image. One of HAlign. Defaults HAlign.LEFT | No |
+| vAlign | The vertical alignment of the image. One of VAlign. Defaults VAlign.TOP | No |
 
 ### Text
 
@@ -154,3 +203,23 @@ ZoomType is also exported from the module. It is an enum with the following type
 | -- | -- |
 | MOUSE | Use the mouse wheel for zooming the map |
 | NONE | No zoom will be done by the component |
+
+### HAlign
+
+HAlign type is exported from the module. It is an enum with the following types:
+
+| Type | Description |
+| -- | -- |
+| LEFT | Align the item left |
+| CENTER | Center the item horizontally |
+| RIGHT | Align the item right |
+
+### VAlign
+
+VAlign type is exported from the module. It is an enum with the following types:
+
+| Type | Description |
+| -- | -- |
+| TOP | Align the item top |
+| CENTER | Center the item vertically |
+| BOTTOM | Align the item bottom |

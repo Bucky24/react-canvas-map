@@ -5,6 +5,7 @@ import {
     VAlign as vAlign,
     HAlign as hAlign,
 } from './enums';
+export * from './Layer';
 
 export const Map = map;
 export const MoveType = moveType;
