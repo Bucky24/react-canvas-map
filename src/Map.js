@@ -58,6 +58,8 @@ class Map extends CanvasComponent {
             mouseDown: false,
             mx: null,
             my: null,
+            smx: null,
+            smy: null,
             mouseCell: {
                 x: null,
                 y: null,
@@ -163,19 +165,24 @@ class Map extends CanvasComponent {
         }
     }
 
-    onMouseDown(overMe) {
+    onMouseDown({ x, y }, overMe) {
         if (overMe) {
             this.setState({
                 mouseDown: true,
+                smx: x,
+                smy: y,
             });
         }
     }
 
     onMouseUp({ x, y, button }, overMe) {
+        const moved = x !== this.state.smx || y !== this.state.smy;
         this.setState({
             mouseDown: false,
+            smx: null,
+            smy: null,
         });
-        if (overMe) {
+        if (overMe && !moved) {
             const cell = this.cellFromReal(x, y);
             this.props.onClick(cell.x, cell.y, button, x, y);
         }
