@@ -15,6 +15,8 @@ export function Layer({ children }) {
         children = [children];
     }
 
+    children = children.flat(5);
+
     for (const child of children) {
         const props = child.props;
         if (props.src) {
