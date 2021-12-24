@@ -18,6 +18,10 @@ export function Layer({ children }) {
     children = children.flat(5);
 
     for (const child of children) {
+        if (!child) {
+            // sometimes we get null as a child
+            continue;
+        }
         const props = child.props;
         if (props.src) {
             layerData.images.push({
