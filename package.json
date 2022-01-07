@@ -1,13 +1,13 @@
 {
 	"name": "@bucky24/react-canvas-map",
-	"version": "0.7.4",
+	"version": "0.7.5",
 	"description": "A 2D map plugin for React Canvas",
 	"main": "build/index.js",
 	"scripts": {
 		"clean": "rm -rf build",
 		"build": "babel src --out-dir build",
 		"mapExample": "webpack-dev-server --config ./examples/mapExample/webpack.config.js",
-		"publish": "npm run build"
+		"prepublishOnly": "npm run build"
 	},
 	"repository": {
 		"type": "git",
