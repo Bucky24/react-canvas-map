@@ -280,19 +280,21 @@ class Map extends CanvasComponent {
             />
             { offMapBackground && <MapBackground
                 background={offMapBackground}
-                minX={minCellX*realCellSize}
-                minY={minCellY*realCellSize}
+                minX={0}
+                minY={0}
                 viewX={x}
                 viewY={y}
                 maxX={maxCellX*realCellSize}
                 maxY={maxCellY*realCellSize}
+                viewWidth={width}
+                viewHeight={height}
                 cellSize={realCellSize}
-                xOff={xOff}
-                yOff={yOff}
+                xOff={0}
+                yOff={0}
             />}
             <Rect
-                x={Math.max(x, x+xOff)}
-                y={Math.max(y, y+yOff)}
+                x={Math.max(minCellX*realCellSize+x+xOff)}
+                y={Math.max(minCellY*realCellSize+y+yOff)}
                 x2={Math.min(x+width, x+xOff+realCellSize*maxCellX)}
                 y2={Math.min(y+height, y+yOff+realCellSize*maxCellY)}
                 color="#fff"

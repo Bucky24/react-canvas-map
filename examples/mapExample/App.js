@@ -68,6 +68,9 @@ function App() {
                 mapBackground={{
                     color: "#0a0",
                 }}
+                offMapBackground={{
+                    color: "#000",
+                }}
             >
                 <Layer>
                     <LayerImage
