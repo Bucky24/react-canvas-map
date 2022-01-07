@@ -284,8 +284,8 @@ class Map extends CanvasComponent {
                 minY={0}
                 viewX={x}
                 viewY={y}
-                maxX={maxCellX*realCellSize}
-                maxY={maxCellY*realCellSize}
+                maxX={width}
+                maxY={height}
                 viewWidth={width}
                 viewHeight={height}
                 cellSize={realCellSize}

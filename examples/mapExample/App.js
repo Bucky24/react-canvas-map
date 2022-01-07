@@ -47,7 +47,7 @@ function App() {
                 yOff={0}
                 minCellX={-5}
                 minCellY={-5}
-                maxCellX={15}
+                maxCellX={10}
                 maxCellY={30}
                 moveType={MoveType.MOUSE}
                 onMove={(x, y) => {
