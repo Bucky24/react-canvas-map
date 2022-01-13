@@ -252,6 +252,7 @@ class Map extends CanvasComponent {
             maxCellX,
             maxCellY,
             children,
+            hideGrid,
         } = this.props;
         const { forceRenderCount } = this.context;
 
@@ -352,20 +353,22 @@ class Map extends CanvasComponent {
             >
                 { children }
             </MapProvider>
-            <MapLines
-                x={x}
-                y={y}
-                width={width}
-                height={height}
-                minCellX={minCellX}
-                minCellY={minCellY}
-                maxCellX={maxCellX}
-                maxCellY={maxCellY}
-                cellSize={realCellSize}
-                color="#aaa"
-                xOff={xOff}
-                yOff={yOff}
-            />
+            {!hideGrid && (   
+                <MapLines
+                    x={x}
+                    y={y}
+                    width={width}
+                    height={height}
+                    minCellX={minCellX}
+                    minCellY={minCellY}
+                    maxCellX={maxCellX}
+                    maxCellY={maxCellY}
+                    cellSize={realCellSize}
+                    color="#aaa"
+                    xOff={xOff}
+                    yOff={yOff}
+                />
+            )}
             <Rect
                 x={x}
                 y={y}

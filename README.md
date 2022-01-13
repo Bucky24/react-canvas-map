@@ -53,6 +53,7 @@ The Map component is the main component that sets up and draws the map.
 | maxCellX | The cell x at which the map will stop drawing cells (inclusive). Defaults 20 | No |
 | maxCellY | The cell y at which the map will stop drawing cells (inclusive). Defaults 20 | No |
 | renderLayersToImage | Flag that determines if layers are pre-rendered to images. This can optimize performance but may not work correctly. Defaults false | No |
+| hideGrid | Boolean, if true, the grid lines for cells are not drawn | No |
 
 ## Layer
 
