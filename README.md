@@ -22,10 +22,6 @@ This module depends on @bucky24/react-canvas as a peer dependency, with a min ve
 
 # Usage
 
-This project exports a single component, Map, which must be embedded within a react-canvas Canvas component (or child thereof).
-
-This component contains a large number of options for the given map that you want to display. It is somewhat low level, and you will likely want to have an integration layer with the rest of your application.
-
 ## Map
 
 The Map component is the main component that sets up and draws the map.
@@ -61,7 +57,7 @@ The Layer component define a layer to be drawn to the map. Layers are drawn in o
 
 ## LayerImage
 
-This component details an image that should be drawn on a given layer.
+This component details an image that should be drawn on a given layer. It must be a child of a `Layer`.
 
 ### Parameters
 
@@ -80,7 +76,7 @@ This component details an image that should be drawn on a given layer.
 
 ## LayerText
 
-This component details text that should be drawn on a given layer.
+This component details text that should be drawn on a given layer. It must be a child of a `Layer`.
 
 ### Parameters
 
@@ -95,11 +91,11 @@ This component details text that should be drawn on a given layer.
 
 ## LayerRaw
 
-This component details a way to free-form draw on a layer. See [Raw](#Raw) for more details. Note there can only be 1 LayerRaw per layer.
+This component details a way to free-form draw on a layer. See [Raw](#Raw) for more details. Note there can only be 1 LayerRaw per layer. It must be a child of a `Layer`.
 
 ## LayerPassthrough
 
-This component can be useful if you want the efficiency of building the layer maually but still want to use the `Layer` component.
+This component can be useful if you want the efficiency of building the layer maually but still want to use the `Layer` component. Note that `LayerPassthrough` does not technically need to be the only child in the `Layer`, but, due to the way it is implemented, it must be the first (and any `LayerRaw` that comes after will overwrite its `raw` portion of the layer).
 
 ### Parameters
 
