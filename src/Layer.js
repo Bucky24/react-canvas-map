@@ -38,7 +38,7 @@ export function Layer({ children }) {
             });
         } else if (props.text) {
             layerData.text.push({
-                text: props.text,
+                text: props.text.replaceAll('\\n', '\n'),
                 cellX: props.x,
                 cellY: props.y,
                 font: props.font,
