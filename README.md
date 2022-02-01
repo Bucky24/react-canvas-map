@@ -104,6 +104,7 @@ This component can be useful if you want the efficiency of building the layer ma
 ### Parameters
 
 | Param | Description | Required |
+| -- | -- | -- |
 | layer | Instance of MapLayer | Yes |
 
 # Manually Building Layers
