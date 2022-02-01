@@ -207,10 +207,6 @@ class MapLayer extends CanvasComponent {
             }
 
             if (layer.raw) {
-                const viewOffX = renderAsImage ? -minXOff : (viewX || 0) + x;
-                const viewOffY = renderAsImage ? -minYOff : (viewY || 0) + y;
-        
-                const func = layer.raw.drawFunc;
                 for (const cell of layer.raw.cells) {
                     const { cellX, cellY, id, cellWidth, cellHeight } = cell;
                     minX = Math.min(cellX, minX);

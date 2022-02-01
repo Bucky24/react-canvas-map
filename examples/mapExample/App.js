@@ -8,7 +8,7 @@ import BLUE_IMAGE from "./images/blue.png";
 import YELLOW_IMAGE from "./images/yellow.jpg";
 import BACKGROUND from "./images/background.png";
 import Figure from "./images/figure.jpg";
-import { LayerImage, LayerRaw, LayerText } from '../../src';
+import { LayerImage, LayerPassthrough, LayerRaw, LayerText } from '../../src';
 
 const GREEN_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Green_Arrow_Up.svg/600px-Green_Arrow_Up.svg.png";
 
@@ -215,6 +215,19 @@ function App() {
                             }
                         ]}
                         drawFunc={drawFunc}
+                    />
+                </Layer>
+                <Layer>
+                    <LayerPassthrough 
+                        layer={{
+                            images: [{
+                                cellX: 0,
+                                cellY: 10,
+                                cellWidth: 1,
+                                cellHeight: 1,
+                                src: RED_IMAGE,
+                            }]
+                        }}
                     />
                 </Layer>
             </Map>

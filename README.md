@@ -97,6 +97,15 @@ This component details text that should be drawn on a given layer.
 
 This component details a way to free-form draw on a layer. See [Raw](#Raw) for more details. Note there can only be 1 LayerRaw per layer.
 
+## LayerPassthrough
+
+This component can be useful if you want the efficiency of building the layer maually but still want to use the `Layer` component.
+
+### Parameters
+
+| Param | Description | Required |
+| layer | Instance of MapLayer | Yes |
+
 # Manually Building Layers
 
 Manually building layers can be done by setting the `layers` property on the Map component. This may be slightly more efficient, but is less React-like.

@@ -6,7 +6,7 @@ import MapContext from './MapContext';
 export function Layer({ children }) {
     const mapContext = useContext(MapContext);
 
-    const layerData = {
+    let layerData = {
         images: [],
         text: [],
     };
@@ -49,6 +49,8 @@ export function Layer({ children }) {
             layerData.raw = {
                 ...props,
             };
+        } else if (props.layer) {
+            layerData = props.layer;
         }
     }
 
@@ -70,5 +72,9 @@ export function LayerText({ text, x, y, font, hAlign, vAlign }) {
 }
 
 export function LayerRaw({ cells, drawFunc }) {
+    return null;
+}
+
+export function LayerPassthrough({ layer }) {
     return null;
 }
