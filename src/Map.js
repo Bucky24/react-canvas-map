@@ -8,7 +8,7 @@ import { Layer, Background } from './shapes';
 import MapLines from './MapLines';
 import MapLayer from './MapLayer';
 import MapBackground from './MapBackground';
-import { MoveType, ZoomType } from "./enums";
+import { MoveType, ZoomType, MapType } from "./enums";
 import { MapProvider } from './MapContext';
 
 const propTypes = {
@@ -32,6 +32,7 @@ const propTypes = {
     maxCellX: PropTypes.number,
     maxCellY: PropTypes.number,
     renderLayersToImage: PropTypes.bool,
+    type: PropTypes.oneOf(Object.values(MapType)),
 };
 
 const defaultProps = {
@@ -46,6 +47,7 @@ const defaultProps = {
     maxCellY: 20,
     cellSize: 25,
     renderLayersToImage: false,
+    type: MapType.STANDARD,
 };
 
 class Map extends CanvasComponent {
@@ -253,6 +255,7 @@ class Map extends CanvasComponent {
             maxCellY,
             children,
             hideGrid,
+            type,
         } = this.props;
         const { forceRenderCount } = this.context;
 
@@ -279,64 +282,6 @@ class Map extends CanvasComponent {
                 color="#fff"
                 fill={true}
             />
-            { offMapBackground && <MapBackground
-                background={offMapBackground}
-                minX={0}
-                minY={0}
-                viewX={x}
-                viewY={y}
-                maxX={width}
-                maxY={height}
-                viewWidth={width}
-                viewHeight={height}
-                cellSize={realCellSize}
-                xOff={0}
-                yOff={0}
-            />}
-            <Rect
-                x={Math.max(minCellX*realCellSize+x+xOff)}
-                y={Math.max(minCellY*realCellSize+y+yOff)}
-                x2={Math.min(x+width, x+xOff+realCellSize*maxCellX)}
-                y2={Math.min(y+height, y+yOff+realCellSize*maxCellY)}
-                color="#fff"
-                fill={true}
-            />
-            { mapBackground && <MapBackground
-                background={mapBackground}
-                minX={minCellX*realCellSize}
-                minY={minCellY*realCellSize}
-                viewX={x}
-                viewY={y}
-                maxX={maxCellX*realCellSize}
-                maxY={maxCellY*realCellSize}
-                viewWidth={width}
-                viewHeight={height}
-                cellSize={realCellSize}
-                xOff={xOff}
-                yOff={yOff}
-            />}
-            { layers.map((layer, i) => {
-                return <MapLayer
-                    key={`layer_${i}`}
-                    layer={layer}
-                    x={x}
-                    y={y}
-                    width={width}
-                    height={height}
-                    xOff={xOff}
-                    yOff={yOff}
-                    cellSize={realCellSize}
-                    cellWidth={maxCellX}
-                    cellHeight={maxCellY}
-                    rerender={() => {
-                        this.context.forceRerender();
-                    }}
-                    minCellX={minCellX}
-                    minCellY={minCellY}
-                    renderAsImage={this.props.renderLayersToImage}
-                    forceRenderCount={forceRenderCount}
-                />;
-            }) }
             <MapProvider
                 xOff={xOff}
                 yOff={yOff}
@@ -350,25 +295,65 @@ class Map extends CanvasComponent {
                 width={width}
                 height={height}
                 forceRenderCount={forceRenderCount}
+                type={type}
             >
+                { offMapBackground && <MapBackground
+                    background={offMapBackground}
+                    offMap={true}
+                />}
+                {!offMapBackground && <Rect
+                    x={Math.max(minCellX*realCellSize+x+xOff)}
+                    y={Math.max(minCellY*realCellSize+y+yOff)}
+                    x2={Math.min(x+width, x+xOff+realCellSize*maxCellX)}
+                    y2={Math.min(y+height, y+yOff+realCellSize*maxCellY)}
+                    color="#fff"
+                    fill={true}
+                />}
+                { mapBackground && <MapBackground
+                    background={mapBackground}
+                    offMap={false}
+                />}
+                { layers.map((layer, i) => {
+                    return <MapLayer
+                        key={`layer_${i}`}
+                        layer={layer}
+                        x={x}
+                        y={y}
+                        width={width}
+                        height={height}
+                        xOff={xOff}
+                        yOff={yOff}
+                        cellSize={realCellSize}
+                        cellWidth={maxCellX}
+                        cellHeight={maxCellY}
+                        rerender={() => {
+                            this.context.forceRerender();
+                        }}
+                        minCellX={minCellX}
+                        minCellY={minCellY}
+                        renderAsImage={this.props.renderLayersToImage}
+                        forceRenderCount={forceRenderCount}
+                    />;
+                }) }
+                {!hideGrid && (   
+                    <MapLines
+                        x={x}
+                        y={y}
+                        width={width}
+                        height={height}
+                        minCellX={minCellX}
+                        minCellY={minCellY}
+                        maxCellX={maxCellX}
+                        maxCellY={maxCellY}
+                        cellSize={realCellSize}
+                        color="#aaa"
+                        xOff={xOff}
+                        yOff={yOff}
+                        type={type}
+                    />
+                )}
                 { children }
             </MapProvider>
-            {!hideGrid && (   
-                <MapLines
-                    x={x}
-                    y={y}
-                    width={width}
-                    height={height}
-                    minCellX={minCellX}
-                    minCellY={minCellY}
-                    maxCellX={maxCellX}
-                    maxCellY={maxCellY}
-                    cellSize={realCellSize}
-                    color="#aaa"
-                    xOff={xOff}
-                    yOff={yOff}
-                />
-            )}
             <Rect
                 x={x}
                 y={y}

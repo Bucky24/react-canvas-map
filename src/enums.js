@@ -20,3 +20,8 @@ export const HAlign = {
     CENTER: "center",
     RIGHT: "right",
 };
+
+export const MapType = {
+    ISOMETRIC: "map_type/isometric",
+    STANDARD: "map_type/standard",
+};

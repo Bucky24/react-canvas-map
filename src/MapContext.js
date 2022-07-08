@@ -17,6 +17,7 @@ export function MapProvider({
     width,
     height,
     forceRenderCount,
+    type,
 }) {
     return (
         <MapContext.Provider
@@ -33,6 +34,7 @@ export function MapProvider({
                 width,
                 height,
                 forceRenderCount,
+                type,
             }}
         >
             {children}
