@@ -15,6 +15,7 @@ import {
     Layer,
 } from './shapes';
 import MapText from './MapText';
+import useCellToReal from './useCellToReal';
 
 const propTypes = {
     layer: Layer.isRequired,
@@ -30,135 +31,121 @@ const propTypes = {
     forceRenderCount: PropTypes.number.isRequired,
 }
 
-const getComponents = ({ layer, cellSize, xOff: viewX, yOff: viewY, x, y, renderAsImage }, { minXOff, minYOff }) => {
-    const cellToReal = (cellX, cellY, cellWidth, cellHeight) => {
-        const result = {
-            x: cellX * cellSize,
-            y: cellY * cellSize,
-        };
+const useGetComponents = () => {
+    const cellToReal = useCellToReal();
 
-        if (cellWidth) {
-            result.width = cellWidth * cellSize;
+    return ({ layer, cellSize, xOff: viewX, yOff: viewY, x, y, renderAsImage }, { minXOff, minYOff }) => {
+        const getImage = (imageData) => {
+            const { xOff, yOff, rot, vAlign } = imageData;
+
+            const rect = cellToReal(
+                imageData.cellX + (xOff || 0),
+                imageData.cellY + (yOff || 0),
+                imageData.cellWidth,
+                imageData.cellHeight,
+            );
+
+            //console.log(rect);
+
+            if (renderAsImage) {
+                rect.x -= minXOff;
+                rect.y -= minYOff;
+            }
+
+            if (vAlign === VAlign.CENTER) {
+                rect.y -= rect.height/2 - cellSize/2;
+            } else if (vAlign === VAlign.BOTTOM) {
+                rect.y -= rect.height - cellSize;
+            }
+
+            return {
+                src: imageData.src,
+                ...rect,
+                rot,
+            };
         }
 
-        if (cellHeight) {
-            result.height = cellHeight * cellSize;
-        }
+        const components = [];
 
-        return result;
-    }
+        const images = [];
 
-    const getImage = (imageData) => {
-		const { xOff, yOff, rot, vAlign } = imageData;
+        if (layer.images) {
+            for (let i=0;i<layer.images.length;i++) {
+                const imageData = layer.images[i];
 
-        const rect = cellToReal(
-            imageData.cellX + (xOff || 0),
-            imageData.cellY + (yOff || 0),
-            imageData.cellWidth,
-            imageData.cellHeight,
-        );
-
-        if (!renderAsImage) {
-            rect.x += (viewX || 0) + x;
-            rect.y += (viewY || 0) + y;
-        } else {
-            rect.x -= minXOff;
-            rect.y -= minYOff;
-        }
-
-        if (vAlign === VAlign.CENTER) {
-            rect.y -= rect.height/2 - cellSize/2;
-        } else if (vAlign === VAlign.BOTTOM) {
-            rect.y -= rect.height - cellSize;
-        }
-
-        return {
-            src: imageData.src,
-            ...rect,
-            rot,
-        };
-    }
-
-    const components = [];
-
-    const images = [];
-
-    if (layer.images) {
-        for (let i=0;i<layer.images.length;i++) {
-            const imageData = layer.images[i];
-
-            const image = getImage(imageData);
-            if (image) {
-                images.push(image);
+                const image = getImage(imageData);
+                if (image) {
+                    images.push(image);
+                }
             }
         }
-    }
 
-    let rawElements = []
-    if (layer.raw && layer.raw.drawFunc) {
-        const viewOffX = renderAsImage ? -minXOff : (viewX || 0) + x;
-        const viewOffY = renderAsImage ? -minYOff : (viewY || 0) + y;
+        let rawElements = []
+        if (layer.raw && layer.raw.drawFunc) {
+            const viewOffX = renderAsImage ? -minXOff : (viewX || 0) + x;
+            const viewOffY = renderAsImage ? -minYOff : (viewY || 0) + y;
 
-        const func = layer.raw.drawFunc;
-        for (const cell of layer.raw.cells) {
-            const { cellX, cellY, id, cellWidth, cellHeight } = cell;
-            let newElements = func({
-                x: cellX*cellSize + viewOffX,
-                y: cellY*cellSize + viewOffY,
-                width: cellWidth*cellSize,
-                height: cellHeight*cellSize,
-                id,
-            });
-            if (!Array.isArray(newElements)) {
-                newElements = [newElements];
+            const func = layer.raw.drawFunc;
+            for (const cell of layer.raw.cells) {
+                const { cellX, cellY, id, cellWidth, cellHeight } = cell;
+                let newElements = func({
+                    x: cellX*cellSize + viewOffX,
+                    y: cellY*cellSize + viewOffY,
+                    width: cellWidth*cellSize,
+                    height: cellHeight*cellSize,
+                    id,
+                });
+                if (!Array.isArray(newElements)) {
+                    newElements = [newElements];
+                }
+                rawElements = [
+                    ...rawElements,
+                    ...newElements,
+                ];
             }
-            rawElements = [
-                ...rawElements,
-                ...newElements,
-            ];
         }
-    }
 
-    const texts = [];
-    if (layer.text) {
-        for (let i=0;i<layer.text.length;i++) {
-            const textData = layer.text[i];
+        const texts = [];
+        if (layer.text) {
+            for (let i=0;i<layer.text.length;i++) {
+                const textData = layer.text[i];
 
-            texts.push({
-                text: textData.text,
-                hAlign: textData.hAlign,
-                vAlign: textData.vAlign,
-                font: textData.font,
-                cellX: textData.cellX,
-                cellY:textData.cellY,
-            });
+                texts.push({
+                    text: textData.text,
+                    hAlign: textData.hAlign,
+                    vAlign: textData.vAlign,
+                    font: textData.font,
+                    cellX: textData.cellX,
+                    cellY:textData.cellY,
+                });
+            }
         }
-    }
 
-    if (images.length > 0) {
-        components.push(<Images
-            key="images"
-            images={images}
-        />);
-    }
+        if (images.length > 0) {
+            components.push(<Images
+                key="images"
+                images={images}
+            />);
+        }
 
-    if (texts.length > 0) {
-        components.push(<MapText
-            key="text"
-            x={renderAsImage ? 0 : x}
-            y={renderAsImage ? 0 : y}
-            xOff={renderAsImage ? 0 : viewX}
-            yOff={renderAsImage ? 0 : viewY}
-            cellSize={cellSize}
-            texts={texts}
-        />);
-    }
+        if (texts.length > 0) {
+            components.push(<MapText
+                key="text"
+                x={renderAsImage ? 0 : x}
+                y={renderAsImage ? 0 : y}
+                xOff={renderAsImage ? 0 : viewX}
+                yOff={renderAsImage ? 0 : viewY}
+                cellSize={cellSize}
+                texts={texts}
+            />);
+        }
 
-    for (const rawElement of rawElements) {
-        components.push(rawElement);
-    }
+        for (const rawElement of rawElements) {
+            components.push(rawElement);
+        }
 
-    return components;
+        return components;
+    }
 }
 
 class MapLayer extends CanvasComponent {
@@ -239,6 +226,7 @@ class MapLayer extends CanvasComponent {
             xOff,
             yOff,
             renderAsImage,
+            getComponents,
         } = this.props;
 
         const layerDims = this.getLayerDims();
@@ -321,4 +309,12 @@ class MapLayer extends CanvasComponent {
 
 MapLayer.propTypes = propTypes;
 
-export default MapLayer;
+const MapLayerWrapper = (props) => {
+    const getComponents = useGetComponents();
+
+    return (
+        <MapLayer {...props} getComponents={getComponents} />
+    );
+}
+
+export default MapLayerWrapper;

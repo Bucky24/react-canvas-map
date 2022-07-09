@@ -17,23 +17,35 @@ export default function useDims() {
     } = useContext(MapContext);
 
     if (type === MapType.ISOMETRIC) {
-        const totalCellsX = -minCellX + cellWidth;
-        const totalCellsY = -minCellY + cellHeight;
+        // all coords have 2 parts because we're basically moving diagonally now
+        const c1XFromX = minCellX*cellSize + xOff + x;
+        const c1XFromY = minCellY * cellSize;
+        const c1YFromY = cellWidth * cellSize/2 + yOff + y + minCellY * cellSize/2;
+        const c1YFromX = -minCellX * cellSize/2;
         const corner1 = {
-            x: minCellX*cellSize + xOff + x,
-            y: cellHeight * cellSize/2 + yOff + y,
+            x: c1XFromX + c1XFromY,
+            y: c1YFromY + c1YFromX,
         }
+        const c2XFromX = cellWidth * cellSize + xOff + x;
+        const c2XFromY = minCellY * cellSize;
         const corner2 = {
-            x: cellWidth * cellSize + xOff + x,
-            y: minCellY*cellSize + yOff + y,
+            x: c2XFromX + c2XFromY,
+            y: minCellY*cellSize/2 + yOff + y,
         }
+        const c3XFromX = cellWidth*2 * cellSize + xOff + x;
+        const c3XFromY = (cellHeight - cellWidth) * cellSize;
         const corner3 = {
-            x: cellWidth*2 * cellSize + xOff + x,
+            x: c3XFromX + c3XFromY,
             y: cellHeight * cellSize/2 + yOff + y,
         }
+
+        const c4XFromX = cellWidth * cellSize + xOff + x + minCellX*cellSize;
+        const c4XFromY = (cellHeight - cellWidth) * cellSize;
+        const c4YFromY = cellHeight * cellSize + yOff + y;
+        const c4YFromX = -(cellHeight - cellWidth) * cellSize/2 - minCellX*cellSize/2;
         const corner4 = {
-            x: cellWidth * cellSize + xOff + x,
-            y: cellHeight*2 * cellSize/2 + yOff + y,
+            x: c4XFromX + c4XFromY,
+            y: c4YFromY + c4YFromX,
         }
 
         return [

@@ -63,8 +63,9 @@ const MapLines = ({
                 context.stroke();
 
                 context.beginPath();
-                for (let i=minCellX;i<=maxCellX;i++) {
-                    const drawX = i*cellSize + xOff + x;
+                const totalX = maxCellX - minCellX;
+                for (let i=1;i<totalX;i++) {
+                    const drawX = corners[0].x + i*cellSize;
                     // start from the bottom-most corner and move right + up as we go
                     const secondDrawX = corners[3].x + i*cellSize;
                     const leastY = corners[0].y - i * cellSize/2;
@@ -73,7 +74,8 @@ const MapLines = ({
                     context.lineTo(secondDrawX, greatY);
                 }
 
-                for (let i=minCellY;i<=maxCellY;i++) {
+                const totalY = maxCellY - minCellY;
+                for (let i=1;i<totalY;i++) {
                     const drawY = corners[0].y + i*cellSize/2;
                     // start from the bottom-most corner and move right + up as we go
                     const secondDrawY = corners[1].y + i*cellSize/2;

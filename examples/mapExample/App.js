@@ -3,11 +3,11 @@ import { Canvas, Rect, ButtonTypes } from '@bucky24/react-canvas';
 import { Map, MoveType, VAlign, Layer } from "@bucky24/react-canvas-map";
 
 
-import RED_IMAGE from "./images/red.jpg";
-import BLUE_IMAGE from "./images/blue.png";
-import YELLOW_IMAGE from "./images/yellow.jpg";
-import BACKGROUND from "./images/background.png";
-import Figure from "./images/figure.jpg";
+import RED_IMAGE from "../images/red.jpg";
+import BLUE_IMAGE from "../images/blue.png";
+import YELLOW_IMAGE from "../images/yellow.jpg";
+import BACKGROUND from "../images/background.png";
+import Figure from "../images/figure.jpg";
 import { LayerImage, LayerPassthrough, LayerRaw, LayerText } from '../../src';
 
 const GREEN_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Green_Arrow_Up.svg/600px-Green_Arrow_Up.svg.png";

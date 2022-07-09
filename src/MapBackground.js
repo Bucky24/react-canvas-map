@@ -53,7 +53,7 @@ const MapBackground = ({
                     context.fillStyle = ptrn;
                 }
             }
-            console.log(borderBoundaries, offMap);
+            //console.log(borderBoundaries, offMap);
             context.moveTo(borderBoundaries[0].x, borderBoundaries[0].y);
             context.lineTo(borderBoundaries[1].x, borderBoundaries[1].y);
             context.lineTo(borderBoundaries[2].x, borderBoundaries[2].y);

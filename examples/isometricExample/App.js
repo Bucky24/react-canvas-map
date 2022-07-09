@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Canvas, Rect, ButtonTypes } from '@bucky24/react-canvas';
-import { Map } from "@bucky24/react-canvas-map";
-import { MapType } from '../../src';
+import { Map, Layer, LayerImage, MapType } from "@bucky24/react-canvas-map";
+
+import RED_IMAGE from "../images/red.jpg";
 
 function App() {
     const width = 500;
@@ -24,8 +25,8 @@ function App() {
                 cellSize={30}
                 xOff={0}
                 yOff={0}
-                minCellX={0}
-                minCellY={0}
+                minCellX={-1}
+                minCellY={-1}
                 maxCellX={3}
                 maxCellY={3}
                 onMove={(x, y) => {
@@ -51,7 +52,29 @@ function App() {
                 }}
                 type={MapType.ISOMETRIC}
             >
- 
+                <Layer>
+                    <LayerImage
+                        src={RED_IMAGE}
+                        width={1}
+                        height={1}
+                        x={2}
+                        y={2}
+                    />
+                    <LayerImage
+                        src={RED_IMAGE}
+                        width={1}
+                        height={1}
+                        x={1}
+                        y={1}
+                    />
+                    <LayerImage
+                        src={RED_IMAGE}
+                        width={1}
+                        height={1}
+                        x={0}
+                        y={0}
+                    />
+                </Layer>
             </Map>
         </Canvas>
         <div>
