@@ -11,21 +11,19 @@ export default function useRealToCell() {
         type,
         xOff,
         yOff,
-        zoom,
         cellSize,
         x,
         y,
         width,
         height,
+        minCellX,
+        minCellY,
     } = useContext(MapContext);
     const dims = useDims();
     const getCellShape = useGetCellShape();
 
     return (rx, ry) => {
         if (type === MapType.STANDARD) {  
-            const zoomUnit = Math.abs(zoom) / 100;
-            const realCellSize = cellSize * zoomUnit;
-
             if (rx < x || ry < y || rx > x + width || ry > y + height) {
                 return {
                     x: null,
@@ -79,6 +77,9 @@ export default function useRealToCell() {
             }
             cellY = Math.round(cellY);
             if (cellY === -0) cellY = 0;
+
+            cellX += minCellX;
+            cellY += minCellY;
 
             // now at this point we do have a cell, however it will not always exactly be the cell that the mouse is over. It will, however,
             // be extremely close. To the point that we can just get the neighbors of the cell we found above and one of them is almost
