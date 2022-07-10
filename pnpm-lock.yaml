@@ -7,11 +7,13 @@ specifiers:
   '@babel/preset-env': ^7.10.4
   '@babel/preset-react': ^7.10.4
   '@bucky24/react-canvas': ^1.7.3
+  '@bucky24/toolbox': ^0.1.0
   babel-loader: ^8.1.0
   css-loader: ^3.6.0
   file-loader: ^6.0.0
   html-webpack-plugin: ^4.3.0
   image-webpack-loader: ^6.0.0
+  prop-types: 15.7.2
   react: ^16.13.1
   react-dom: ^16.13.1
   react-fast-compare: ^3.2.0
@@ -21,6 +23,7 @@ specifiers:
   webpack-dev-server: ^3.11.0
 
 dependencies:
+  '@bucky24/toolbox': 0.1.0
   react-fast-compare: 3.2.0
 
 devDependencies:
@@ -29,12 +32,13 @@ devDependencies:
   '@babel/plugin-transform-react-jsx': 7.18.6_@babel+core@7.18.6
   '@babel/preset-env': 7.18.6_@babel+core@7.18.6
   '@babel/preset-react': 7.18.6_@babel+core@7.18.6
-  '@bucky24/react-canvas': 1.9.2_react@16.14.0
+  '@bucky24/react-canvas': 1.9.2_uutjjb2r36qagpytglxm7vtgnq
   babel-loader: 8.2.5_xcbjw3zjektbxpb7yraegegdpi
   css-loader: 3.6.0_webpack@4.46.0
   file-loader: 6.2.0_webpack@4.46.0
   html-webpack-plugin: 4.5.2_webpack@4.46.0
   image-webpack-loader: 6.0.0
+  prop-types: 15.7.2
   react: 16.14.0
   react-dom: 16.14.0_react@16.14.0
   style-loader: 1.3.0_webpack@4.46.0
@@ -1277,15 +1281,20 @@ packages:
       to-fast-properties: 2.0.0
     dev: true
 
-  /@bucky24/react-canvas/1.9.2_react@16.14.0:
+  /@bucky24/react-canvas/1.9.2_uutjjb2r36qagpytglxm7vtgnq:
     resolution: {integrity: sha512-cN9v9afdtr2C58tOe4vGEPU/lIy9sF25Hn3EHlGXR/RXqugrwKVpgJss2COlpLs0vE7f0qUxgyLaa2bO56Pc8g==}
     peerDependencies:
       prop-types: 15.7.2
       react: 17.x.x
     dependencies:
+      prop-types: 15.7.2
       react: 16.14.0
       react-fast-compare: 3.2.0
     dev: true
+
+  /@bucky24/toolbox/0.1.0:
+    resolution: {integrity: sha512-pFuk5VjEzBJRQw5hRNVE/XezGSv/6azQTBPzUttIpCNN9i8nPVq0L2yFsgzQlssjVZkrMo2oK+r1GaGjOO1AAA==}
+    dev: false
 
   /@jridgewell/gen-mapping/0.1.1:
     resolution: {integrity: sha512-sQXCasFk+U8lWYEe66WxRDOE9PjVz4vSM51fTu3Hw+ClTpUSQb718772vH3pyS5pShp6lvQM7SxgIDXXXmOX7w==}
@@ -6150,6 +6159,14 @@ packages:
         optional: true
     dependencies:
       bluebird: 3.7.2
+    dev: true
+
+  /prop-types/15.7.2:
+    resolution: {integrity: sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==}
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+      react-is: 16.13.1
     dev: true
 
   /prop-types/15.8.1:

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { CanvasComponent, Rect, ButtonTypes } from '@bucky24/react-canvas';
+import { CanvasComponent, Rect, ButtonTypes, Line, Shape, CanvasContext } from '@bucky24/react-canvas';
 import isEqual from 'react-fast-compare';
 
 import { Layer, Background } from './shapes';
@@ -10,7 +10,7 @@ import MapLayer from './MapLayer';
 import MapBackground from './MapBackground';
 import { MoveType, ZoomType, MapType } from "./enums";
 import { MapProvider } from './MapContext';
-import realToCell from './realToCell';
+import useRealToCell from './useRealToCell';
 
 const propTypes = {
     width: PropTypes.number.isRequired,
@@ -56,8 +56,6 @@ class Map extends CanvasComponent {
         super(props);
 
         this.state = {
-            xOff: null,
-            yOff: null,
             mouseDown: false,
             mx: null,
             my: null,
@@ -67,7 +65,6 @@ class Map extends CanvasComponent {
                 x: null,
                 y: null,
             },
-            zoom: null,
         };
     }
 
@@ -113,8 +110,12 @@ class Map extends CanvasComponent {
     onMouseMove({ x, y }, overMe) {
         const cell = this.cellFromReal(x, y);
 
-        const xOff = this.state.xOff || this.props.xOff || 0;
-        const yOff = this.state.yOff || this.props.yOff || 0;
+        const xOff = this.props.xOff || 0;
+        const yOff = this.props.yOff || 0;
+
+        this.setState({
+            extra: cell.extra,
+        });
 
         if (
             overMe &&
@@ -129,11 +130,10 @@ class Map extends CanvasComponent {
         if (this.state.mouseDown && this.props.moveType === MoveType.MOUSE) {
             const dx = this.state.mx - x;
             const dy = this.state.my - y;
+            this.props.setOff(xOff-dx, yOff-dy);
             this.setState({
                 mx: x,
                 my: y,
-                xOff: xOff - dx,
-                yOff: yOff - dy,
                 mouseCell: cell,
             });
         } else {
@@ -207,30 +207,16 @@ class Map extends CanvasComponent {
         }
 
         if (this.props.zoomType == ZoomType.MOUSE) {
-            const zoom = this.state.zoom || this.props.zoom || 100;
+            const zoom = this.props.zoom || 100;
 
             let newZoom = zoom + delta;
             newZoom = Math.min(200, Math.max(10, newZoom));
-            this.setState({
-                zoom: newZoom,
-            });
+            this.props.setZoom(newZoom);
         }
     }
 
     cellFromReal(rx, ry) {
-        const { x, y, width, height, cellSize, type } = this.props;
-
-        return realToCell(rx, ry, {
-            type,
-            xOff: this.state.xOff || this.props.xOff || 0,
-            yOff: this.state.yOff || this.props.yOff || 0,
-            zoom: this.state.zoom || this.props.zoom || 100,
-            cellSize,
-            x,
-            y,
-            width,
-            height,
-        });
+        return this.props.realToCell(rx, ry);
     }
 
     render() {
@@ -250,12 +236,12 @@ class Map extends CanvasComponent {
             children,
             hideGrid,
             type,
+            forceRenderCount,
         } = this.props;
-        const { forceRenderCount } = this.context;
 
         const xOff = this.state.xOff || this.props.xOff || 0;
         const yOff = this.state.yOff || this.props.yOff || 0;
-        const zoom = this.state.zoom || this.props.zoom || 100;
+        const zoom = this.props.zoom || 100;
 
         const zoomUnit = Math.abs(zoom) / 100;
         const realCellSize = cellSize * zoomUnit;
@@ -276,78 +262,62 @@ class Map extends CanvasComponent {
                 color="#fff"
                 fill={true}
             />
-            <MapProvider
-                xOff={xOff}
-                yOff={yOff}
-                cellSize={realCellSize}
-                cellWidth={maxCellX}
-                cellHeight={maxCellY}
-                minCellX={minCellX}
-                minCellY={minCellY}
-                x={x}
-                y={y}
-                width={width}
-                height={height}
-                forceRenderCount={forceRenderCount}
-                type={type}
-            >
-                { offMapBackground && <MapBackground
-                    background={offMapBackground}
-                    offMap={true}
-                />}
-                {!offMapBackground && <Rect
-                    x={Math.max(minCellX*realCellSize+x+xOff)}
-                    y={Math.max(minCellY*realCellSize+y+yOff)}
-                    x2={Math.min(x+width, x+xOff+realCellSize*maxCellX)}
-                    y2={Math.min(y+height, y+yOff+realCellSize*maxCellY)}
-                    color="#fff"
-                    fill={true}
-                />}
-                { mapBackground && <MapBackground
-                    background={mapBackground}
-                    offMap={false}
-                />}
-                { layers.map((layer, i) => {
-                    return <MapLayer
-                        key={`layer_${i}`}
-                        layer={layer}
-                        x={x}
-                        y={y}
-                        width={width}
-                        height={height}
-                        xOff={xOff}
-                        yOff={yOff}
-                        cellSize={realCellSize}
-                        cellWidth={maxCellX}
-                        cellHeight={maxCellY}
-                        rerender={() => {
-                            this.context.forceRerender();
-                        }}
-                        minCellX={minCellX}
-                        minCellY={minCellY}
-                        renderAsImage={this.props.renderLayersToImage}
-                        forceRenderCount={forceRenderCount}
-                    />;
-                }) }
-                {!hideGrid && (   
-                    <MapLines
-                        x={x}
-                        y={y}
-                        width={width}
-                        height={height}
-                        minCellX={minCellX}
-                        minCellY={minCellY}
-                        maxCellX={maxCellX}
-                        maxCellY={maxCellY}
-                        cellSize={realCellSize}
-                        color="#aaa"
-                        xOff={xOff}
-                        yOff={yOff}
-                        type={type}
-                    />
-                )}
-                { children }
-            </MapProvider>
+            { offMapBackground && <MapBackground
+                background={offMapBackground}
+                offMap={true}
+            />}
+            {!offMapBackground && <Rect
+                x={Math.max(minCellX*realCellSize+x+xOff)}
+                y={Math.max(minCellY*realCellSize+y+yOff)}
+                x2={Math.min(x+width, x+xOff+realCellSize*maxCellX)}
+                y2={Math.min(y+height, y+yOff+realCellSize*maxCellY)}
+                color="#fff"
+                fill={true}
+            />}
+            { mapBackground && <MapBackground
+                background={mapBackground}
+                offMap={false}
+            />}
+            { layers.map((layer, i) => {
+                return <MapLayer
+                    key={`layer_${i}`}
+                    layer={layer}
+                    x={x}
+                    y={y}
+                    width={width}
+                    height={height}
+                    xOff={xOff}
+                    yOff={yOff}
+                    cellSize={realCellSize}
+                    cellWidth={maxCellX}
+                    cellHeight={maxCellY}
+                    rerender={() => {
+                        this.context.forceRerender();
+                    }}
+                    minCellX={minCellX}
+                    minCellY={minCellY}
+                    renderAsImage={this.props.renderLayersToImage}
+                    forceRenderCount={forceRenderCount}
+                />;
+            }) }
+            {!hideGrid && (   
+                <MapLines
+                    x={x}
+                    y={y}
+                    width={width}
+                    height={height}
+                    minCellX={minCellX}
+                    minCellY={minCellY}
+                    maxCellX={maxCellX}
+                    maxCellY={maxCellY}
+                    cellSize={realCellSize}
+                    color="#aaa"
+                    xOff={xOff}
+                    yOff={yOff}
+                    type={type}
+                />
+            )}
+            { children }
             <Rect
                 x={x}
                 y={y}
@@ -356,6 +326,18 @@ class Map extends CanvasComponent {
                 color="#000"
                 fill={false}
             />
+            {this.state.extra && <>
+               {this.state.extra.dims && this.state.extra.dims.map((dims) => {
+                    return <Shape
+                        points={dims}
+                        color="#f00"
+                        fill={false}
+                        x={0}
+                        y={0}
+                        close={true}
+                    />
+               })}
+            </>}
         </>;
     }
 }
@@ -363,4 +345,60 @@ class Map extends CanvasComponent {
 Map.propTypes = propTypes;
 Map.defaultProps = defaultProps;
 
-export default Map;
+const MapHookWrapper = (props) => {
+    const realToCell = useRealToCell();
+
+    return (
+        <Map
+            {...props}
+            realToCell={realToCell}
+        />
+    );
+}
+
+const MapWrapper = (props) => {
+    const [xOff, setXOff] = useState(props.xOff || 0);
+    const [yOff, setYOff] = useState(props.yOff || 0);
+    const [zoom, setZoom] = useState(props.zoom || 100);
+    const { forceRenderCount } = useContext(CanvasContext);
+
+    const { cellSize, maxCellX, maxCellY, minCellX, minCellY, x, y, width, height, type } = props;
+
+    const zoomUnit = Math.abs(zoom) / 100;
+    const realCellSize = cellSize * zoomUnit;
+
+
+    return (
+        <MapProvider
+            xOff={xOff}
+            yOff={yOff}
+            cellSize={realCellSize}
+            cellWidth={maxCellX}
+            cellHeight={maxCellY}
+            minCellX={minCellX}
+            minCellY={minCellY}
+            x={x}
+            y={y}
+            width={width}
+            height={height}
+            forceRenderCount={forceRenderCount}
+            type={type}
+        >
+            <MapHookWrapper
+                {...props}
+                xOff={xOff}
+                yOff={yOff}
+                setOff={(x, y) => {
+                    setXOff(x);
+                    setYOff(y);
+                }}
+                zoom={zoom}
+                setZoom={(zoom) => {
+                    setZoom(zoom);
+                }}
+            />
+        </MapProvider>
+    );
+}
+
+export default MapWrapper;

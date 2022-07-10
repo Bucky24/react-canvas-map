@@ -47,6 +47,11 @@ const useGetComponents = () => {
 
             //console.log(rect);
 
+            rect.x = rect.drawX;
+            rect.y = rect.drawY;
+            rect.height = rect.drawHeight;
+            rect.width = rect.drawWidth;
+
             if (renderAsImage) {
                 rect.x -= minXOff;
                 rect.y -= minYOff;

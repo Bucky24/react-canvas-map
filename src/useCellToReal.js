@@ -4,7 +4,9 @@ import { MapType } from "./enums";
 import MapContext from "./MapContext";
 import useDims from "./useDims";
 
-export default function cellToReal() {
+// this method spits out 2 shapes. The first is the actual shape of the tile, and the second is the shape that
+// should be use for drawing items to the time
+export default function useCellToReal() {
     const { type, cellSize, minCellX, minCellY } = useContext(MapContext);
     const dims = useDims();
 
@@ -18,12 +20,17 @@ export default function cellToReal() {
                 y: dims[0].y + actualCellY * cellSize,
             };
 
+            result.drawX = result.x;
+            result.drawY = result.y;
+
             if (cellWidth) {
                 result.width = cellWidth * cellSize;
+                result.drawWidth = result.width;
             }
 
             if (cellHeight) {
                 result.height = cellHeight * cellSize;
+                result.drawHeight = result.height;
             }
 
             return result;
@@ -34,15 +41,19 @@ export default function cellToReal() {
 
             // because we slide x and y for isometric for each cell, each final coord has 2 parts,
             // one from the start x coord and one from the start y coord
-            const xPartOfX = dims[0].x + actualCellX * cellSize + cellSize/2;
+            const xPartOfX = dims[0].x + actualCellX * cellSize + cellSize;
             const yPartOfX = actualCellY * cellSize;
             const xPartOfY = -actualCellX * cellSize/2;
-            const yPartOfY = dims[0].y + actualCellY * cellSize/2 - cellSize/2;
+            const yPartOfY = dims[0].y + actualCellY * cellSize/2 - cellSize;
             return {
                 x: xPartOfX + yPartOfX,
                 y: yPartOfY + xPartOfY,
+                drawX: xPartOfX + yPartOfX - cellSize/2,
+                drawY: yPartOfY + xPartOfY + cellSize/2,
                 width: cellWidth * cellSize,
-                height: cellHeight * cellSize,
+                height: cellHeight * cellSize/2,
+                drawWidth: cellWidth * cellSize,
+                drawHeight: cellWidth * cellSize,
             };
         }
     }

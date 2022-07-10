@@ -9,7 +9,7 @@ function App() {
     const height = 400;
 	
 	const [selectedTile, setSelectedTile] = useState({ x: 11, y: 3 });
-	const [mouseOverTile, setMouseOverTile] = useState(null);
+	const [mouseOverTile, setMouseOverTile] = useState({ x: 0, y: 0 });
     const [useIso, setUseIso] = useState(true);
 
     return (<div>
@@ -26,10 +26,10 @@ function App() {
                 cellSize={30}
                 xOff={0}
                 yOff={0}
-                minCellX={-1}
-                minCellY={-1}
-                maxCellX={3}
-                maxCellY={3}
+                minCellX={-2}
+                minCellY={-2}
+                maxCellX={5}
+                maxCellY={5}
                 onMove={(x, y) => {
                     setMouseOverTile({
                         x,
@@ -58,8 +58,8 @@ function App() {
                         src={RED_IMAGE}
                         width={1}
                         height={1}
-                        x={2}
-                        y={2}
+                        x={mouseOverTile.x}
+                        y={mouseOverTile.y}
                     />
                     <LayerImage
                         src={RED_IMAGE}

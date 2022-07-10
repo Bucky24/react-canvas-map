@@ -2,20 +2,18 @@ import { useContext } from 'react';
 import { MapType } from './enums';
 import MapContext from './MapContext';
 
-export default function useDims() {
-    const {
-        minCellX,
-        minCellY,
-        cellWidth,
-        cellHeight,
-        cellSize,
-        xOff,
-        yOff,
-        x,
-        y,
-        type,
-    } = useContext(MapContext);
-
+export function getDims({
+    minCellX,
+    minCellY,
+    cellWidth,
+    cellHeight,
+    cellSize,
+    xOff,
+    yOff,
+    x,
+    y,
+    type,
+}) {
     if (type === MapType.ISOMETRIC) {
         // all coords have 2 parts because we're basically moving diagonally now
         const c1XFromX = minCellX*cellSize + xOff + x;
@@ -79,4 +77,32 @@ export default function useDims() {
             corner4,
         ];
     }
+}
+
+export default function useDims() {
+    const {
+        minCellX,
+        minCellY,
+        cellWidth,
+        cellHeight,
+        cellSize,
+        xOff,
+        yOff,
+        x,
+        y,
+        type,
+    } = useContext(MapContext);
+
+    return getDims({
+        minCellX,
+        minCellY,
+        cellWidth,
+        cellHeight,
+        cellSize,
+        xOff,
+        yOff,
+        x,
+        y,
+        type,
+    });
 }

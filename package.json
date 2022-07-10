@@ -41,6 +41,7 @@
 		"file-loader": "^6.0.0",
 		"html-webpack-plugin": "^4.3.0",
 		"image-webpack-loader": "^6.0.0",
+		"prop-types": "15.7.2",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
 		"style-loader": "^1.2.1",
@@ -52,6 +53,7 @@
 		"@bucky24/react-canvas": "^1.7.3"
 	},
 	"dependencies": {
+		"@bucky24/toolbox": "^0.1.0",
 		"react-fast-compare": "^3.2.0"
 	}
 }
