@@ -10,6 +10,7 @@ function App() {
 	
 	const [selectedTile, setSelectedTile] = useState({ x: 11, y: 3 });
 	const [mouseOverTile, setMouseOverTile] = useState(null);
+    const [useIso, setUseIso] = useState(true);
 
     return (<div>
         <Canvas
@@ -50,7 +51,7 @@ function App() {
                 offMapBackground={{
                     color: "#000",
                 }}
-                type={MapType.ISOMETRIC}
+                type={useIso ? MapType.ISOMETRIC : MapType.STANDARD}
             >
                 <Layer>
                     <LayerImage
@@ -82,6 +83,12 @@ function App() {
             { mouseOverTile ? mouseOverTile.x : "None" }
             &nbsp;/&nbsp;
             { mouseOverTile ? mouseOverTile.y : "None" }
+            <br/>
+            <button
+                onClick={() => {
+                    setUseIso(!useIso);
+                }}
+            >{useIso ? 'Change to Standard' : 'Change to Isometric'}</button>
         </div>
     </div>);
 }

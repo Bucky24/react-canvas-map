@@ -9,10 +9,13 @@ export default function cellToReal() {
     const dims = useDims();
 
     return (cellX, cellY, cellWidth, cellHeight) => {
+        const actualCellX = cellX - minCellX;
+        const actualCellY = cellY - minCellY;
+
         if (type === MapType.STANDARD) {
             const result = {
-                x: dims[0].x + cellX * cellSize,
-                y: dims[0].y + cellY * cellSize,
+                x: dims[0].x + actualCellX * cellSize,
+                y: dims[0].y + actualCellY * cellSize,
             };
 
             if (cellWidth) {
@@ -25,8 +28,6 @@ export default function cellToReal() {
 
             return result;
         } else if (type === MapType.ISOMETRIC) {
-            const actualCellX = cellX - minCellX;
-            const actualCellY = cellY - minCellY;
             //console.log(dims[0], cellX, cellX * cellSize/2, dims[0].x + cellX * cellSize/2);
 
             //console.log(cellY);
