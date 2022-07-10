@@ -37,7 +37,7 @@ function App() {
                     });
                 }}
                 onClick={(x, y, button) => {
-                    console.log(button, "button clicked!");
+                    console.log(button, "button clicked!", x, y);
                     if (button === ButtonTypes.LEFT)
                         setSelectedTile({
                             x,

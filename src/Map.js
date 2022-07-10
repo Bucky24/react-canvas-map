@@ -10,6 +10,7 @@ import MapLayer from './MapLayer';
 import MapBackground from './MapBackground';
 import { MoveType, ZoomType, MapType } from "./enums";
 import { MapProvider } from './MapContext';
+import realToCell from './realToCell';
 
 const propTypes = {
     width: PropTypes.number.isRequired,
@@ -139,8 +140,12 @@ class Map extends CanvasComponent {
             this.setState({
                 mx: x,
                 my: y,
-                mouseCell: cell,
             });
+            if (overMe) {
+                this.setState({
+                    mouseCell: cell,
+                });
+            }
         }
     }
 
@@ -213,30 +218,19 @@ class Map extends CanvasComponent {
     }
 
     cellFromReal(rx, ry) {
-        const { x, y, width, height, cellSize } = this.props;
-        const xOff = this.state.xOff || this.props.xOff || 0;
-        const yOff = this.state.yOff || this.props.yOff || 0;       
-        const zoom = this.state.zoom || this.props.zoom || 100;
+        const { x, y, width, height, cellSize, type } = this.props;
 
-        const zoomUnit = Math.abs(zoom) / 100;
-        const realCellSize = cellSize * zoomUnit;
-
-        if (rx < x || ry < y || rx > x + width || ry > y + height) {
-            return {
-                x: null,
-                y: null,
-            };
-        }
-
-        const shiftX = rx - x - xOff;
-        const shiftY = ry - y - yOff;
-        const cellX = Math.floor(shiftX/realCellSize);
-        const cellY = Math.floor(shiftY/realCellSize);
-
-        return {
-            x: cellX,
-            y: cellY,
-        };
+        return realToCell(rx, ry, {
+            type,
+            xOff: this.state.xOff || this.props.xOff || 0,
+            yOff: this.state.yOff || this.props.yOff || 0,
+            zoom: this.state.zoom || this.props.zoom || 100,
+            cellSize,
+            x,
+            y,
+            width,
+            height,
+        });
     }
 
     render() {
