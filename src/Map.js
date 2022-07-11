@@ -56,7 +56,6 @@ class Map extends CanvasComponent {
         super(props);
 
         this.state = {
-            mouseDown: false,
             mx: null,
             my: null,
             smx: null,
@@ -127,7 +126,7 @@ class Map extends CanvasComponent {
             this.props.onMove(cell.x, cell.y);
         }
 
-        if (this.state.mouseDown && this.props.moveType === MoveType.MOUSE) {
+        if (this.props.mouseDown && this.props.moveType === MoveType.MOUSE) {
             const dx = this.state.mx - x;
             const dy = this.state.my - y;
             this.props.setOff(xOff-dx, yOff-dy);
@@ -175,24 +174,24 @@ class Map extends CanvasComponent {
     onMouseDown({ x, y }, overMe) {
         if (overMe) {
             this.setState({
-                mouseDown: true,
                 smx: x,
                 smy: y,
             });
+            this.props.setMouseDown(true);
         }
     }
 
     onMouseUp({ x, y, button }, overMe) {
         const moved = x !== this.state.smx || y !== this.state.smy;
-        this.setState({
-            mouseDown: false,
-            smx: null,
-            smy: null,
-        });
         if (overMe && !moved) {
             const cell = this.cellFromReal(x, y);
             this.props.onClick(cell.x, cell.y, button, x, y);
         }
+        this.setState({
+            smx: null,
+            smy: null,
+        });
+        this.props.setMouseDown(false);
     }
 
     onWheel({ up }, overMe) {
@@ -361,12 +360,15 @@ const MapWrapper = (props) => {
     const [yOff, setYOff] = useState(props.yOff || 0);
     const [zoom, setZoom] = useState(props.zoom || 100);
     const { forceRenderCount } = useContext(CanvasContext);
+    // needs to be at this level so that changing mouse down triggers a render
+    // here and not in the Map component (which won't actually rerender
+    // for some reason)
+    const [mouseDown, setMouseDown] = useState(false);
 
     const { cellSize, maxCellX, maxCellY, minCellX, minCellY, x, y, width, height, type } = props;
 
     const zoomUnit = Math.abs(zoom) / 100;
     const realCellSize = cellSize * zoomUnit;
-
 
     return (
         <MapProvider
@@ -396,6 +398,8 @@ const MapWrapper = (props) => {
                 setZoom={(zoom) => {
                     setZoom(zoom);
                 }}
+                mouseDown={mouseDown}
+                setMouseDown={setMouseDown}
             />
         </MapProvider>
     );
