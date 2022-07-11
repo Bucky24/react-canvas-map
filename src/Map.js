@@ -382,7 +382,7 @@ const MapWrapper = (props) => {
             width={width}
             height={height}
             forceRenderCount={forceRenderCount}
-            type={type}
+            type={type || MapType.STANDARD}
         >
             <MapHookWrapper
                 {...props}
