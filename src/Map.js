@@ -401,4 +401,7 @@ const MapWrapper = (props) => {
     );
 }
 
+MapProvider.propTypes = propTypes;
+MapProvider.defaultProps = defaultProps;
+
 export default MapWrapper;
