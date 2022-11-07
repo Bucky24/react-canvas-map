@@ -41,13 +41,6 @@ export default function useRealToCell() {
                 y: cellY,
             };
         } else if (type === MapType.ISOMETRIC) {
-            /*if (rx > dims[1].x) {
-                console.log('second corner');
-            } else {
-                console.log('first corner');
-            }*/
-
-            // NOTE THIS DOES NOT CURRENTLY WORK WITH ZOOM. I think because the dims don't work with zoom
             const xWithoutOffset = rx - dims[0].x;
             const yWithoutOffset = ry - dims[0].y;
             const xByCell = Math.round(xWithoutOffset / cellSize);

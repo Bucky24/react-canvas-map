@@ -25,6 +25,7 @@ const MapText = ({
     xOff,
     yOff,
     texts,
+    cellToReal,
 }) => {
     return <CanvasContext.Consumer>
         {({ context }) => {
@@ -50,8 +51,14 @@ const MapText = ({
                     textSize = context.measureText(text);
                     const textWidth = textSize.width;
 
-                    const cellStartX = x + cellX * cellSize + xOff;
-                    const cellStartY = y + cellY * cellSize + yOff;
+                    const coords = cellToReal(cellX, cellY, 1, 1);
+                    console.log(coords);
+
+                    const cellStartX = coords.x;
+                    const cellStartY = coords.y;
+
+                    //const cellStartX = x + cellX * cellSize + xOff;
+                    //const cellStartY = y + cellY * cellSize + yOff;
                     const cellEndX = cellStartX + cellSize;
                     const cellEndY = cellStartY + cellSize;
                     const cellCenterX = cellStartX + (cellEndX - cellStartX) / 2;

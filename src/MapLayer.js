@@ -142,6 +142,7 @@ const useGetComponents = () => {
                 yOff={renderAsImage ? 0 : viewY}
                 cellSize={cellSize}
                 texts={texts}
+                cellToReal={cellToReal}
             />);
         }
 
