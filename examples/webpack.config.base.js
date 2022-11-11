@@ -10,6 +10,7 @@ module.exports = (dirname) => {
 			path: path.resolve(dirname, 'build'),
 			filename: 'main.bundle.js'
 		},
+		mode: 'development',
 		resolve: {
 			alias: {
 				'@bucky24/react-canvas-map': path.resolve(__dirname, '../src/index.js'),
@@ -38,26 +39,27 @@ module.exports = (dirname) => {
 				{
 					test: /\.css$/,
 					loader: 'css-loader',
-					query: {
-						modules: true,
-						localIdentName: '[name]__[local]___[hash:base64:5]'
-					}
+					options: {
+						modules: {
+							localIdentName: '[name]__[local]___[hash:base64:5]',
+						},
+					},
 				},
 				{
 					test: /\.(jpe?g|png|gif|svg)$/i,
-					loaders: [
-						'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
-						{
+					use: {
+						loader: 'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+						options: {
 							loader: 'image-webpack-loader',
-							query: {
+							options: {
 								optipng: {
 									optimizationLevel: 4,
-								}
-							}
-						}
-					]
-				}
-			]
+								},
+							},
+						},
+					},
+				},
+			],
 		},
 		stats: {
 			colors: true
