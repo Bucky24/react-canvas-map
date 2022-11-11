@@ -18,7 +18,7 @@ yarn add @bucky24/react-canvas-map
 
 # Dependencies
 
-This module depends on @bucky24/react-canvas as a peer dependency, with a min version of 1.7.3.
+This module depends on @bucky24/react-canvas as a peer dependency, with a min version of 2.0.0.
 
 # Usage
 
