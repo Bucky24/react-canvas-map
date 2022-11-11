@@ -19,8 +19,8 @@ function App() {
         >
             <Map
                 renderLayersToImage={true}
-                x={50}
-                y={50}
+                x={0}
+                y={0}
                 width={width-100}
                 height={height-100}
                 cellSize={30}
@@ -82,6 +82,7 @@ function App() {
                         x={0}
                         y={0}
                         font="12px Arial"
+                        hAlign="center"
                     />
                     {/*<LayerText
                         text="right"
@@ -136,7 +137,7 @@ function App() {
                         y={4}
                         font="8px Arial"
                         vAlign="center"
-            />*/}
+                    />*/}
                 </Layer>
             </Map>
         </Canvas>
