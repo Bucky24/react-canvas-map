@@ -50,6 +50,7 @@ The Map component is the main component that sets up and draws the map.
 | maxCellY | The cell y at which the map will stop drawing cells (inclusive). Defaults 20 | No |
 | renderLayersToImage | Flag that determines if layers are pre-rendered to images. This can optimize performance but may not work correctly. Defaults false | No |
 | hideGrid | Boolean, if true, the grid lines for cells are not drawn | No |
+| type | MapType. Indicates type of map, defaults to MapType.STANDARD | No |
 
 ## Layer
 
@@ -230,3 +231,14 @@ VAlign type is exported from the module. It is an enum with the following types:
 | TOP | Align the item top |
 | CENTER | Center the item vertically |
 | BOTTOM | Align the item bottom |
+
+### MapType
+
+MapType is expected from the module. It is an enum with the following types:
+
+Note there may be some issues with the isometric grid, especially around displaying text.
+
+| Type | Description |
+| -- | -- |
+| STANDARD | A normal square grid |
+| ISOMETRIC | An isometric grid |
