@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { CanvasContext, useWithContext } from "@bucky24/react-canvas";
 
 import useGetCellShape from './useGetCellShape';
+import MapContext from './MapContext';
+import { MapType } from './enums';
 
 const propTypes = {
     cellSize: PropTypes.number.isRequired,
@@ -31,6 +33,7 @@ const MapText = ({
 }) => {
     const withContext = useWithContext();
     const getCellShape = useGetCellShape();
+    const { type } = useContext(MapContext);
 
     return withContext((context) => {
         for (let textObj of texts) {
@@ -52,17 +55,20 @@ const MapText = ({
                 const textWidth = textSize.width;
 
                 const cellShape = getCellShape(cellX, cellY);
-                console.log(cellShape);
 
                 const cellStartX = cellShape[0].x;
-                const cellStartY = cellShape[0].y;
+                let cellStartY = cellShape[0].y;
+                if (type === MapType.ISOMETRIC) {
+                    cellStartY = cellShape[1].y;
+                }
 
                 const cellEndX = cellShape[2].x;
-                const cellEndY = cellShape[2].y;
+                let cellEndY = cellShape[2].y;
+                if (type === MapType.ISOMETRIC) {
+                    cellEndY = cellShape[3].y;
+                }
                 const cellCenterX = cellStartX + (cellEndX - cellStartX) / 2;
                 const cellCenterY = cellStartY + (cellEndY - cellStartY) / 2;
-
-                console.log(cellCenterX, cellCenterY)
 
                 let textX = cellStartX;
                 switch (hAlign) {

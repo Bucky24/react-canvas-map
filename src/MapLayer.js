@@ -45,8 +45,6 @@ const useGetComponents = () => {
                 imageData.cellHeight,
             );
 
-            //console.log(rect);
-
             rect.x = rect.drawX;
             rect.y = rect.drawY;
             rect.height = rect.drawHeight;

@@ -53,7 +53,7 @@ export default function useCellToReal() {
                 width: cellWidth * cellSize,
                 height: cellHeight * cellSize/2,
                 drawWidth: cellWidth * cellSize,
-                drawHeight: cellWidth * cellSize,
+                drawHeight: cellHeight * cellSize,
             };
         }
     }
