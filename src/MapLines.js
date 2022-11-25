@@ -10,7 +10,7 @@ const MapLines = ({
     color, xOff, yOff, type }) => {
 
     const dims = useDims();
-    const withContext = useWithContext;
+    const withContext = useWithContext();
 
     return withContext((context) => {
         context.save();

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useWithContext } from '@bucky24/react-canvas';
+import { CanvasContext, useWithContext } from '@bucky24/react-canvas';
 
 import { Background } from './shapes';
 import useDims from './useDims';
@@ -15,47 +15,48 @@ const MapBackground = ({
     background,
     offMap,
 }) => {
+    const dims = useDims();
+    const { x, y, width, height } = useContext(MapContext);
     const withContext = useWithContext();
+    const { getImage, forceRerender } = useContext(CanvasContext);
+
+    const offMapBoundary = [
+        { x, y },
+        { x: x+width, y },
+        { x: x+width, y: y+height },
+        { x, y: y+height },
+    ]
+
+    const borderBoundaries = offMap ? offMapBoundary : dims;
 
     return withContext((context) => {
         context.save();
 
+        const clipRegion = new Path2D();
+        clipRegion.rect(x, y, width, height);
+        context.clip(clipRegion);
+
         const { color, image } = background;
 
-        const screenTopX = viewX + viewWidth;
-        const screenTopY = viewY + viewHeight;
-        const drawBotX = minX + xOff + viewX;
-        const drawBotY = minY + yOff + viewY;
-        const drawTopX = maxX + xOff + viewX;
-        const drawTopY = maxY + yOff + viewY;
-
-        const finalBotX = Math.max(viewX, Math.min(screenTopX, drawBotX));
-        const finalBotY = Math.max(viewY, Math.min(screenTopY, drawBotY));
-        const finalTopX = Math.max(viewX, Math.min(screenTopX, drawTopX));
-        const finalTopY = Math.max(viewY, Math.min(screenTopY, drawTopY));
-
-        let finalWidth = Math.max(0, finalTopX - finalBotX);
-        let finalHeight = Math.max(0, finalTopY - finalBotY);
-
+        context.beginPath();
         if (color) {
-            context.beginPath();
             context.fillStyle = color;
-            context.rect(finalBotX,finalBotY,finalWidth,finalHeight);
-            context.fill();
         } else if (image) {
             const img = getImage(image, forceRerender);
 
             if (img) {
-                context.rect(viewX,viewY,width,height);
-                context.clip();
-
                 // https://stackoverflow.com/questions/33337346/canvas-resize-image-object-and-repeat-pattern
                 // need a createPattern function in canvas context
                 const ptrn = context.createPattern(img, 'repeat');
                 context.fillStyle = ptrn;
-                context.fillRect(x, y, width, height);
             }
         }
+        //console.log(borderBoundaries, offMap);
+        context.moveTo(borderBoundaries[0].x, borderBoundaries[0].y);
+        context.lineTo(borderBoundaries[1].x, borderBoundaries[1].y);
+        context.lineTo(borderBoundaries[2].x, borderBoundaries[2].y);
+        context.lineTo(borderBoundaries[3].x, borderBoundaries[3].y);
+        context.fill();
 
         context.restore();
     });
