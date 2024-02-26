@@ -32,7 +32,6 @@ const propTypes = {
     minCellY: PropTypes.number,
     maxCellX: PropTypes.number,
     maxCellY: PropTypes.number,
-    renderLayersToImage: PropTypes.bool,
     type: PropTypes.oneOf(Object.values(MapType)),
 };
 
@@ -47,7 +46,6 @@ const defaultProps = {
     maxCellX: 20,
     maxCellY: 20,
     cellSize: 25,
-    renderLayersToImage: false,
     type: MapType.STANDARD,
 };
 
@@ -277,28 +275,7 @@ class Map extends CanvasComponent {
                 background={mapBackground}
                 offMap={false}
             />}
-            { layers.map((layer, i) => {
-                return <MapLayer
-                    key={`layer_${i}`}
-                    layer={layer}
-                    x={x}
-                    y={y}
-                    width={width}
-                    height={height}
-                    xOff={xOff}
-                    yOff={yOff}
-                    cellSize={realCellSize}
-                    cellWidth={maxCellX}
-                    cellHeight={maxCellY}
-                    rerender={() => {
-                        this.context.forceRerender();
-                    }}
-                    minCellX={minCellX}
-                    minCellY={minCellY}
-                    renderAsImage={this.props.renderLayersToImage}
-                    forceRenderCount={forceRenderCount}
-                />;
-            }) }
+            {layers}
             {!hideGrid && (   
                 <MapLines
                     x={x}
@@ -356,6 +333,7 @@ const MapHookWrapper = (props) => {
 }
 
 const MapWrapper = (props) => {
+    // TODO: The Map has many default props, but MapWrapper ignores these, meaning the MapProvider never gets them either. They need to be moved to this component instead.
     const [xOff, setXOff] = useState(props.xOff || 0);
     const [yOff, setYOff] = useState(props.yOff || 0);
     const [zoom, setZoom] = useState(props.zoom || 100);

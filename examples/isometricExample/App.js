@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { Canvas, Rect, ButtonTypes } from '@bucky24/react-canvas';
-import { Map, Layer, LayerImage, MapType, LayerText, VAlign } from "@bucky24/react-canvas-map";
+import React, { useState, useCallback } from 'react';
+import { Canvas, Rect, ButtonTypes, Image, Text } from '@bucky24/react-canvas';
+import { Map, Layer, LayerImage, MapType, LayerText, VAlign, Cell } from "@bucky24/react-canvas-map";
 
 import RED_IMAGE from "../images/red.jpg";
 import BLUE_IMAGE from "../images/blue.png";
 import YELLOW_IMAGE from "../images/yellow.jpg";
 import Figure from "../images/figure.jpg";
+import GreenImage from './GreenImage';
 
 const GREEN_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Green_Arrow_Up.svg/600px-Green_Arrow_Up.svg.png";
 
@@ -23,7 +24,6 @@ function App() {
             height={height}
         >
             <Map
-                renderLayersToImage={true}
                 x={0}
                 y={0}
                 width={width-100}
@@ -59,135 +59,77 @@ function App() {
                 type={useIso ? MapType.ISOMETRIC : MapType.STANDARD}
             >
                 <Layer>
-                    <LayerImage
-                        src={GREEN_IMAGE}
-                        width={2}
-                        height={1}
-                        x={selectedTile.x}
-                        y={selectedTile.y}
+                    <GreenImage x={selectedTile.x} y={selectedTile.y} />
+                    <Cell x={5.5} y={2} width={0.5} height={0.5}
+                        cb={useCallback((dims) => {
+                            return <Image src={RED_IMAGE} {...dims} rot={90} />
+                        }, [])}
                     />
-                    <LayerImage
-                        src={GREEN_IMAGE}
-                        width={0.5}
-                        height={0.5}
-                        x={5}
-                        y={2}
-                        rot={0}
+                    <Cell x={5.5} y={2.5} width={0.5} height={0.5}
+                        cb={useCallback((dims) => {
+                            return <Image src={BLUE_IMAGE} {...dims} rot={180} />
+                        }, [])}
                     />
-                    <LayerImage
-                        src={RED_IMAGE}
-                        width={0.5}
-                        height={0.5}
-                        x={5}
-                        y={2}
-                        xOff={0.5}
-                        rot={90}
-                   />
-                    <LayerImage
-                        src={BLUE_IMAGE}
-                        width={0.5}
-                        height={0.5}
-                        x={5}
-                        y={2}
-                        xOff={0.5}
-                        yOff={0.5}
-                        rot={180}
-                   />
-                    <LayerImage
-                        src={YELLOW_IMAGE}
-                        width={0.5}
-                        height={0.5}
-                        x={5}
-                        y={2}
-                        yOff={0.5}
-                        rot={270}
-                   />
-                    <LayerImage
-                        src={Figure}
-                        width={1}
-                        height={2}
-                        x={8}
-                        y={5}
-                        vAlign={VAlign.TOP}
-                   /> 
-                    <LayerImage
-                        src={Figure}
-                        width={1}
-                        height={2}
-                        x={9}
-                        y={5}
-                        vAlign={VAlign.CENTER}
-                   />
-                    <LayerImage
-                        src={Figure}
-                        width={1}
-                        height={2}
-                        x={10}
-                        y={5}
-                        vAlign={VAlign.BOTTOM}
-                   />
+                    <Cell x={5} y={2.5} width={0.5} height={0.5}
+                        cb={useCallback((dims) => {
+                            return <Image src={YELLOW_IMAGE} {...dims} rot={270} />
+                        }, [])}
+                    />
+                    <Cell x={8} y={5} width={1} height={2}
+                        cb={useCallback((dims) => {
+                            return <Image src={Figure} {...dims} />
+                        }, [])}
+                    />
                 </Layer>
                 <Layer>
-                    <LayerText
-                        text="left"
-                        x={6}
-                        y={6}
-                        font="12px Arial"
-                        hAlign="left"
+                    <Cell x={6} y={6} width={1} height={1}
+                        cb={useCallback((dims) => {
+                            return <Text {...dims} font="12px Arial">
+                                left
+                            </Text>;
+                        }, [])}
                     />
-                    <LayerText
-                        text="right"
-                        x={5}
-                        y={6}
-                        font="12px Arial"
-                        hAlign="right"
+                    <Cell x={5} y={6} width={1} height={1}
+                        cb={useCallback((dims) => {
+                            return <Text {...dims} font="12px Arial">
+                                right
+                            </Text>;
+                        }, [])}
                     />
-                    <LayerText
-                        text="mid"
-                        x={7}
-                        y={6}
-                        font="12px Arial"
-                        hAlign="center"
+                    <Cell x={7} y={6} width={1} height={1}
+                        cb={useCallback((dims) => {
+                            return <Text {...dims} font="12px Arial">
+                                mid
+                            </Text>;
+                        }, [])}
                     />
-                    <LayerText
-                        text="top"
-                        x={4}
-                        y={7}
-                        font="12px Arial"
+                    <Cell x={4} y={7} width={1} height={1}
+                        cb={useCallback((dims) => {
+                            return <Text {...dims} font="12px Arial">
+                                top
+                            </Text>;
+                        }, [])}
                     />
-                    <LayerText
-                        text="bot"
-                        x={5}
-                        y={7}
-                        font="12px Arial"
-                        vAlign="bottom"
+                    <Cell x={5} y={7} width={1} height={1}
+                        cb={useCallback((dims) => {
+                            return <Text {...dims} font="12px Arial">
+                                bot
+                            </Text>;
+                        }, [])}
                     />
-                    <LayerText
-                        text="mid"
-                        x={7}
-                        y={7}
-                        font="12px Arial"
-                        vAlign="center"
+                    <Cell x={7} y={7} width={1} height={1}
+                        cb={useCallback((dims) => {
+                            return <Text {...dims} font="12px Arial">
+                                mid
+                            </Text>;
+                        }, [])}
                     />
-                    <LayerText
-                        text="mult\nline\ntext"
-                        x={4}
-                        y={4}
-                        font="8px Arial"
-                    />
-                    <LayerText
-                        text="mult\nline\ntext"
-                        x={5}
-                        y={4}
-                        font="8px Arial"
-                        vAlign="bottom"
-                    />
-                    <LayerText
-                        text="mult\nline\ntext"
-                        x={6}
-                        y={4}
-                        font="8px Arial"
-                        vAlign="center"
+                    <Cell x={7} y={7} width={1} height={1}
+                        cb={useCallback((dims) => {
+                            return <Text {...dims} font="12px Arial">
+                                
+                            </Text>;
+                        }, [])}
                     />
                 </Layer>
             </Map>

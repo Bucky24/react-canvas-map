@@ -2,13 +2,14 @@ import { useContext } from "react";
 
 import { MapType } from "./enums";
 import MapContext from "./MapContext";
-import useDims from "./useDims";
+import { getDims } from "./useDims";
 
 // this method spits out 2 shapes. The first is the actual shape of the tile, and the second is the shape that
 // should be use for drawing items to the time
-export default function useCellToReal() {
-    const { type, cellSize, minCellX, minCellY } = useContext(MapContext);
-    const dims = useDims();
+export default function useCellToReal(mapContext) {
+    const resolvedContext = mapContext || useContext(MapContext);
+    const { type, cellSize, minCellX, minCellY } = resolvedContext;
+    const dims = getDims(resolvedContext);
 
     return (cellX, cellY, cellWidth, cellHeight) => {
         const actualCellX = cellX - minCellX;

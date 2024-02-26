@@ -18,13 +18,18 @@ yarn add @bucky24/react-canvas-map
 
 # Dependencies
 
-This module depends on @bucky24/react-canvas as a peer dependency, with a min version of 2.0.0.
+This module depends on @bucky24/react-canvas as a peer dependency, with a min version of 3.0.2.
 
 # Usage
 
 ## Map
 
 The Map component is the main component that sets up and draws the map.
+
+### Children
+
+The Map component expects a series of Layers as its children. Layers are drawn in order.
+
 ### Parameters
 
 | Param | Description | Required |
@@ -36,12 +41,11 @@ The Map component is the main component that sets up and draws the map.
 | cellSize | Size in pixels of each map cell (can be modified internally based on zoom level). Defaults to 25 | No |
 | xOff | Initial map horizontal offset | No |
 | yOff | Initial map vertical offset | No |
-| layers | List of MapLayer objects | No |
 | moveType | One of the MoveType entries. Determines how the map can be panned. Defaults to MOUSE | No |
 | mapBackground | MapBackground object, describes background for the map | No |
 | offMapBackground | MapBackground object, describes background for area that is not take up by the map | No |
 | onMove | Function, fires when mouse moves over a map cell. First param is cell x, second is cell y. | No |
-| onClick | Function, fires when move is clicked over a map cell. `onClick(cellX, cellY, button, rawX, rawY)` button is a ButtonType from @bucky24/react-canvas). | No |
+| onClick | Function, fires when move is clicked over a map cell. `onClick(cellX, cellY, button, rawX, rawY)` (button is a ButtonType from @bucky24/react-canvas). | No |
 | zoom | Number that indicates the zoom level of the map. Used as initial value if zoomType is not NONE. 100 is default zoom (100% zoom) | No |
 | zoomType | One of the ZoomType entries. Determines how the map is zoomed. Defaults to MOUSE | No |
 | minCellX | The cell x at which the map will start drawing cells. Defaults 0 | No |
