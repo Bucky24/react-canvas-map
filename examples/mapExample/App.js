@@ -29,7 +29,6 @@ function App() {
                 y={50}
                 width={width-100}
                 height={height-100}
-                cellSize={30}
                 xOff={0}
                 yOff={0}
                 minCellX={-5}

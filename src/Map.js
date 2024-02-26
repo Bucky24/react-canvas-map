@@ -333,7 +333,20 @@ const MapHookWrapper = (props) => {
 }
 
 const MapWrapper = (props) => {
-    // TODO: The Map has many default props, but MapWrapper ignores these, meaning the MapProvider never gets them either. They need to be moved to this component instead.
+    // copy to make it extendable
+    props = {...props};
+    // setting default props
+    if (!props.onMove) props.onMove = () => {};
+    if (!props.onClick) props.onClick = () => {};
+    if (!props.moveType) props.moveType = MoveType.MOUSE;
+    if (!props.zoomType) props.zoomType = ZoomType.MOUSE;
+    if (!props.minCellX) props.minCellX = 0;
+    if (!props.minCellY) props.minCellY = 0;
+    if (!props.maxCellX) props.maxCellX = 20;
+    if (!props.maxCellY) props.maxCellY = 20;
+    if (!props.cellSize) props.cellSize = 25;
+    if (!props.type) props.type = MapType.STANDARD;
+
     const [xOff, setXOff] = useState(props.xOff || 0);
     const [yOff, setYOff] = useState(props.yOff || 0);
     const [zoom, setZoom] = useState(props.zoom || 100);
