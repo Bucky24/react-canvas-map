@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { CanvasComponent, Rect, ButtonTypes, Line, Shape, CanvasContext } from '@bucky24/react-canvas';
+import { CanvasComponent, Rect, Shape, CanvasContext } from '@bucky24/react-canvas';
 import isEqual from 'react-fast-compare';
 
 import { Layer, Background } from './shapes';
@@ -233,7 +233,6 @@ class Map extends CanvasComponent {
             children,
             hideGrid,
             type,
-            forceRenderCount,
         } = this.props;
 
         const xOff = this.state.xOff || this.props.xOff || 0;
@@ -276,7 +275,7 @@ class Map extends CanvasComponent {
                 offMap={false}
             />}
             {layers}
-            {!hideGrid && (   
+            {!hideGrid && (
                 <MapLines
                     x={x}
                     y={y}
@@ -358,6 +357,8 @@ const MapWrapper = (props) => {
 
     const { cellSize, maxCellX, maxCellY, minCellX, minCellY, x, y, width, height, type } = props;
 
+    const initialCellSize = useRef(cellSize);
+
     const zoomUnit = Math.abs(zoom) / 100;
     const realCellSize = cellSize * zoomUnit;
 
@@ -376,6 +377,8 @@ const MapWrapper = (props) => {
             height={height}
             forceRenderCount={forceRenderCount}
             type={type || MapType.STANDARD}
+            zoom={zoom}
+            initialCellSize={initialCellSize.current}
         >
             <MapHookWrapper
                 {...props}
@@ -391,6 +394,7 @@ const MapWrapper = (props) => {
                 }}
                 mouseDown={mouseDown}
                 setMouseDown={setMouseDown}
+                initialCellSize={initialCellSize.current}
             />
         </MapProvider>
     );

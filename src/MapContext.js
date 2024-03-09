@@ -18,6 +18,8 @@ export function MapProvider({
     height,
     forceRenderCount,
     type,
+    zoom,
+    initialCellSize,
 }) {
     return (
         <MapContext.Provider
@@ -35,6 +37,8 @@ export function MapProvider({
                 height,
                 forceRenderCount,
                 type,
+                zoom,
+                initialCellSize,
             }}
         >
             {children}

@@ -32,8 +32,8 @@ devDependencies:
     specifier: ^7.10.4
     version: 7.18.6(@babel/core@7.18.6)
   '@bucky24/react-canvas':
-    specifier: ^3.0.2
-    version: 3.0.2(react@18.2.0)
+    specifier: ^3.1.4
+    version: 3.1.4(react@18.2.0)
   babel-loader:
     specifier: ^8.1.0
     version: 8.2.5(@babel/core@7.18.6)(webpack@5.75.0)
@@ -1393,8 +1393,8 @@ packages:
       to-fast-properties: 2.0.0
     dev: true
 
-  /@bucky24/react-canvas@3.0.2(react@18.2.0):
-    resolution: {integrity: sha512-Vk6SJ6a2JKO6+n5+oZZaTiOyAAI7nHob2w/2gJZg1dNHGROozsNUWIF+f/K68ITyrnU87ZBT6SjLJh9c+0iJrA==}
+  /@bucky24/react-canvas@3.1.4(react@18.2.0):
+    resolution: {integrity: sha512-t9n6rUoWRHJUe3yRy3LS4RZQJtW+QHA+K+hqBUtr2i8QyySGQfVZjCfcUFKMoEExpHoJqhJHMm3c6vWKNVE2Iw==}
     peerDependencies:
       react: 18.x.x
     dependencies:
@@ -2105,6 +2105,7 @@ packages:
 
   /boolbase@1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
+    requiresBuild: true
     dev: true
 
   /brace-expansion@1.1.11:
@@ -2467,6 +2468,7 @@ packages:
   /css-what@6.1.0:
     resolution: {integrity: sha512-HTUrgRJ7r4dsZKU6GjmpfRK1O76h97Z8MfS1G0FozR+oF2kG6Vfe8JE6zwrkbxigziPHinCJ+gCPjA9EaBDtRw==}
     engines: {node: '>= 6'}
+    requiresBuild: true
     dev: true
 
   /cssesc@3.0.0:
@@ -2662,6 +2664,7 @@ packages:
 
   /dom-serializer@1.4.1:
     resolution: {integrity: sha512-VHwB3KfrcOOkelEG2ZOfxqLZdfkil8PtJi4P8N2MMXucZq2yLp75ClViUlOVwyoHEDjYU433Aq+5zWP61+RGag==}
+    requiresBuild: true
     dependencies:
       domelementtype: 2.3.0
       domhandler: 4.3.1
@@ -4275,6 +4278,7 @@ packages:
 
   /nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
+    requiresBuild: true
     dependencies:
       boolbase: 1.0.0
     dev: true
