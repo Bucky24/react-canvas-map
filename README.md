@@ -111,6 +111,7 @@ This component can be useful if you want the efficiency of building the layer ma
 # Manually Building Layers
 
 Manually building layers can be done by setting the `layers` property on the Map component. This may be slightly more efficient, but is less React-like.
+
 ### MapLayer
 
 The MapLayer object defines a layer of various objects that need to be drawn. MapLayers are drawn in order, so the first layer is drawn first, and the last layer is drawn last. You can use this to ensure that you get a proper z-depth for your map. MapLayers have the following keys:
@@ -214,7 +215,8 @@ ZoomType is also exported from the module. It is an enum with the following type
 | Type | Description |
 | -- | -- |
 | MOUSE | Use the mouse wheel for zooming the map |
-| NONE | No zoom will be done by the component |
+| FIXED | The `zoom` parameter will be respected but the map cannot be dynamically zoomed by the user |
+| NONE | No zoom will be done by the component, and zoom of the map will be set to 100% |
 
 ### HAlign
 

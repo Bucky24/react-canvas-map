@@ -7,6 +7,7 @@ export const MoveType = {
 export const ZoomType = {
     MOUSE: "zoom_mouse",
     NONE: "zoom_none",
+    FIXED: 'zoom_fixed',
 };
 
 export const VAlign = {

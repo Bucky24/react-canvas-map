@@ -233,11 +233,15 @@ class Map extends CanvasComponent {
             children,
             hideGrid,
             type,
+            zoomType,
         } = this.props;
 
         const xOff = this.state.xOff || this.props.xOff || 0;
         const yOff = this.state.yOff || this.props.yOff || 0;
-        const zoom = this.props.zoom || 100;
+        let zoom = this.props.zoom || 100;
+        if (zoomType === ZoomType.NONE) {
+            zoom = 100;
+        }
 
         const zoomUnit = Math.abs(zoom) / 100;
         const realCellSize = cellSize * zoomUnit;
