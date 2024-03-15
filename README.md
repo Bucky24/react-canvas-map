@@ -52,9 +52,10 @@ The Map component expects a series of Layers as its children. Layers are drawn i
 | minCellY | The cell y at which the map will start drawing cells. Defaults 0 | No |
 | maxCellX | The cell x at which the map will stop drawing cells (inclusive). Defaults 20 | No |
 | maxCellY | The cell y at which the map will stop drawing cells (inclusive). Defaults 20 | No |
-| renderLayersToImage | Flag that determines if layers are pre-rendered to images. This can optimize performance but may not work correctly. Defaults false | No |
 | hideGrid | Boolean, if true, the grid lines for cells are not drawn | No |
 | type | MapType. Indicates type of map, defaults to MapType.STANDARD | No |
+| centerX | X coord of cell to center the map on. Ignored unless moveType is NONE | No |
+| centerY | Y coord of cell to center the map on. Ignored unless moveType is NONE | No |
 
 ## Layer
 
@@ -161,7 +162,7 @@ The Raw object determines how to draw a layer that is custom, allowing more comp
 | Param | Description | Required |
 | -- | -- | -- |
 | cells | List of CellItem objects | Yes |
-| drawFunc | A callback function that will be called once per cell given in the cells list. This function will be given a DrawFuncParams object as a parameter. This function should return either a single React element, or an array of React elements. Note that in the case where `renderLayersToImage` is not set or set to false, these elements must be something that can be handled by the Clip element from `@bucky24/react-canvas` |
+| drawFunc | A callback function that will be called once per cell given in the cells list. This function will be given a DrawFuncParams object as a parameter. This function should return either a single React element, or an array of React elements. Note that these elements must be something that can be handled by the Clip element from `@bucky24/react-canvas` |
 
 ### CellItem
 

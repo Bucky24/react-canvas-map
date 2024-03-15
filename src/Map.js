@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from 'react';
+import React, { useContext, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { CanvasComponent, Rect, Shape, CanvasContext } from '@bucky24/react-canvas';
 import isEqual from 'react-fast-compare';
@@ -11,6 +11,7 @@ import MapBackground from './MapBackground';
 import { MoveType, ZoomType, MapType } from "./enums";
 import { MapProvider } from './MapContext';
 import useRealToCell from './useRealToCell';
+import useCellToReal from './useCellToReal';
 
 const propTypes = {
     width: PropTypes.number.isRequired,
@@ -326,11 +327,13 @@ Map.defaultProps = defaultProps;
 
 const MapHookWrapper = (props) => {
     const realToCell = useRealToCell();
+    const cellToReal = useCellToReal();
 
     return (
         <Map
             {...props}
             realToCell={realToCell}
+            cellToReal={cellToReal}
         />
     );
 }
@@ -366,28 +369,42 @@ const MapWrapper = (props) => {
     const zoomUnit = Math.abs(zoom) / 100;
     const realCellSize = cellSize * zoomUnit;
 
+    const mapContext = {
+        xOff,
+        yOff,
+        cellSize: realCellSize,
+        cellWidth: maxCellX,
+        cellHeight: maxCellY,
+        minCellX,
+        minCellY,
+        x,
+        y,
+        width,
+        height,
+        forceRenderCount,
+        type: type || MapType.STANDARD,
+        zoom,
+        initialCellSize: initialCellSize.current,
+    }
+
+    const cellToReal = useCellToReal(mapContext);
+
+    if (props.moveType === MoveType.NONE && props.centerX !== undefined &&props.centerY !== undefined) {
+        // use center x and y to figure out where the map should be
+        const realCoords = cellToReal(props.centerX, props.centerY);
+
+        const centerX = ((x + width) / 2) - realCoords.x;
+        mapContext.xOff = centerX;
+        const centerY = ((y + height) / 2) - realCoords.y;
+        mapContext.yOff = centerY;
+    }
+
     return (
-        <MapProvider
-            xOff={xOff}
-            yOff={yOff}
-            cellSize={realCellSize}
-            cellWidth={maxCellX}
-            cellHeight={maxCellY}
-            minCellX={minCellX}
-            minCellY={minCellY}
-            x={x}
-            y={y}
-            width={width}
-            height={height}
-            forceRenderCount={forceRenderCount}
-            type={type || MapType.STANDARD}
-            zoom={zoom}
-            initialCellSize={initialCellSize.current}
-        >
+        <MapProvider {...mapContext}>
             <MapHookWrapper
                 {...props}
-                xOff={xOff}
-                yOff={yOff}
+                xOff={mapContext.xOff}
+                yOff={mapContext.yOff}
                 setOff={(x, y) => {
                     setXOff(x);
                     setYOff(y);
