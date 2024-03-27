@@ -97,7 +97,7 @@ This component details text that should be drawn on a given layer. It must be a 
 
 ## LayerRaw
 
-This component details a way to free-form draw on a layer. See [Raw](#Raw) for more details. Note there can only be 1 LayerRaw per layer. It must be a child of a `Layer`.
+This compoment has been replaced by [Cell](#Cell)
 
 ## LayerPassthrough
 
@@ -164,9 +164,9 @@ The Raw object determines how to draw a layer that is custom, allowing more comp
 | cells | List of CellItem objects | Yes |
 | drawFunc | A callback function that will be called once per cell given in the cells list. This function will be given a DrawFuncParams object as a parameter. This function should return either a single React element, or an array of React elements. Note that these elements must be something that can be handled by the Clip element from `@bucky24/react-canvas` |
 
-### CellItem
+### Cell
 
-An object that describes an item on the map
+A component that describes an item on the map
 
 | Param | Description | Required |
 | -- | -- | -- |
@@ -174,7 +174,18 @@ An object that describes an item on the map
 | cellY | The y coord on the map of the item | Yes |
 | cellWidth | The width, in cells, of the item | Yes |
 | cellHeight | The height, in cells, of the item | Yes |
-| id | The id of the item. Can be literally anything so this can also be used for passthrough data if necessary. | No |
+| cb | Callback function that is called with a CellDims | Yes |
+
+#### CellDims
+
+| Key | Description |
+| -- | -- |
+| x | Starting X of cell |
+| y | Starting Y of cell |
+| width | Width of cell |
+| height | Height of cell |
+| x2 | x + width |
+| y2 | y + width |
 
 ### DrawFuncParams
 
