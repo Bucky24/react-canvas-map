@@ -1,6 +1,6 @@
 {
 	"name": "@bucky24/react-canvas-map",
-	"version": "2.0.3",
+	"version": "2.0.4",
 	"description": "A 2D map plugin for React Canvas",
 	"main": "build/index.js",
 	"scripts": {
@@ -10,7 +10,8 @@
 		"isometricExample": "webpack-dev-server --config ./examples/isometricExample/webpack.config.js",
 		"prepublishOnly": "npm run build",
 		"lockZoomExample": "webpack-dev-server --config ./examples/lockZoomExample/webpack.config.js",
-		"centerMapExample": "webpack-dev-server --config ./examples/centerMapExample/webpack.config.js"
+		"centerMapExample": "webpack-dev-server --config ./examples/centerMapExample/webpack.config.js",
+		"drawOrderExample": "webpack-dev-server --config ./examples/drawOrderExample/webpack.config.js"
 	},
 	"repository": {
 		"type": "git",

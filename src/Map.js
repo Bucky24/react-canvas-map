@@ -54,6 +54,10 @@ class Map extends CanvasComponent {
     constructor(props) {
         super(props);
 
+        // if anything is missing from here as a default state
+        // then it may trigger a re-render that refuses to
+        // re-render the child layers (which will cause the map
+        // to go blank)
         this.state = {
             mx: null,
             my: null,
@@ -63,6 +67,7 @@ class Map extends CanvasComponent {
                 x: null,
                 y: null,
             },
+            extra: undefined,
         };
     }
 
