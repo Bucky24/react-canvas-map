@@ -59,7 +59,13 @@ The Map component expects a series of Layers as its children. Layers are drawn i
 
 ## Layer
 
-The Layer component define a layer to be drawn to the map. Layers are drawn in order. It does not take any props, and expects zero or more Layer specific components (detailed below). This component must be placed as a child of a Map.
+The Layer component define a layer to be drawn to the map. Layers are drawn in order. It expects zero or more Layer specific components (detailed below). This component must be placed as a child of a Map.
+
+### Parameters
+
+| Param | Description | Required |
+| -- | -- | -- |
+| id | The id of the layer, used for debug logs | No |
 
 ## LayerImage
 

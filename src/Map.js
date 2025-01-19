@@ -240,6 +240,7 @@ class Map extends CanvasComponent {
             hideGrid,
             type,
             zoomType,
+            log,
         } = this.props;
 
         const xOff = this.state.xOff || this.props.xOff || 0;
@@ -258,6 +259,8 @@ class Map extends CanvasComponent {
             width,
             height,
         };
+
+        log("Map", "Rendering map");
 
         return <>
             <Rect
@@ -361,7 +364,7 @@ const MapWrapper = (props) => {
     const [xOff, setXOff] = useState(props.xOff || 0);
     const [yOff, setYOff] = useState(props.yOff || 0);
     const [zoom, setZoom] = useState(props.zoom || 100);
-    const { forceRenderCount } = useContext(CanvasContext);
+    const { forceRenderCount, log } = useContext(CanvasContext);
     // needs to be at this level so that changing mouse down triggers a render
     // here and not in the Map component (which won't actually rerender
     // for some reason)
@@ -390,6 +393,7 @@ const MapWrapper = (props) => {
         type: type || MapType.STANDARD,
         zoom,
         initialCellSize: initialCellSize.current,
+        log,
     }
 
     const cellToReal = useCellToReal(mapContext);
@@ -421,6 +425,7 @@ const MapWrapper = (props) => {
                 mouseDown={mouseDown}
                 setMouseDown={setMouseDown}
                 initialCellSize={initialCellSize.current}
+                log={log}
             />
         </MapProvider>
     );

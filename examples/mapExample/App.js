@@ -6,7 +6,6 @@ import { Map, MoveType, VAlign, Layer } from "@bucky24/react-canvas-map";
 import RED_IMAGE from "../images/red.jpg";
 import BLUE_IMAGE from "../images/blue.png";
 import YELLOW_IMAGE from "../images/yellow.jpg";
-import BACKGROUND from "../images/background.png";
 import Figure from "../images/figure.jpg";
 import { LayerImage, LayerText } from '../../src';
 
@@ -23,6 +22,7 @@ function App() {
         <Canvas
             width={width}
             height={height}
+            debug={true}
         >
             <Map
                 x={100}
@@ -58,7 +58,7 @@ function App() {
                     color: "#000",
                 }}
             >
-                <Layer>
+                <Layer id="images">
                     <LayerImage
                         src={GREEN_IMAGE}
                         width={2}
@@ -106,7 +106,7 @@ function App() {
                         y={5}
                    /> 
                 </Layer>
-                <Layer>
+                <Layer id="text">
                     <LayerText
                         x={4}
                         y={6}

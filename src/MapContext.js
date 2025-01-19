@@ -20,6 +20,7 @@ export function MapProvider({
     type,
     zoom,
     initialCellSize,
+    log,
 }) {
     return (
         <MapContext.Provider
@@ -39,6 +40,7 @@ export function MapProvider({
                 type,
                 zoom,
                 initialCellSize,
+                log,
             }}
         >
             {children}

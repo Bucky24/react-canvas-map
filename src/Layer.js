@@ -4,7 +4,7 @@ import { CompoundElement, Clip } from "@bucky24/react-canvas";
 import MapContext from './MapContext';
 import { CellProvider } from "./CellContext";
 
-export function Layer({ children }) {
+export function Layer({ id, children }) {
     const mapContext = useContext(MapContext);
     const [sortedChildren, setSortedChildren] = useState([]);
 
@@ -13,6 +13,7 @@ export function Layer({ children }) {
     };
 
     delete extraProps.zoom;
+    delete extraProps.log;
     extraProps.cellSize = mapContext.initialCellSize;
 
     useEffect(() => {
@@ -23,6 +24,8 @@ export function Layer({ children }) {
 
         setSortedChildren(sortedKids);
     }, [children]);
+
+    mapContext.log("Layer " + (id || ""), "Rendering with extra props", extraProps);
 
     // figure out the zoom based on the initial cell size and the new cell size
     const zoom = mapContext.cellSize / mapContext.initialCellSize;
