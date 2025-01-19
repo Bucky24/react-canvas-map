@@ -18,8 +18,29 @@ export function Layer({ id, children }) {
 
     useEffect(() => {
         const sortedKids = [...children];
+        // TODO: probably should flatten this, or try to go into children of children
+        // to get coords just in case
         sortedKids.sort((a, b) => {
-            return a.props.y - b.props.y;
+            let ay, by;
+            if (Array.isArray(a)) {
+                for (const item of a) {
+                    if (ay === undefined) {
+                        ay = item.props?.y;
+                        continue;
+                    }
+                    ay = Math.min(ay ,item.props?.y);
+                }
+            }
+            if (Array.isArray(b)) {
+                for (const item of b) {
+                    if (by === undefined) {
+                        by = item.props?.y;
+                        continue;
+                    }
+                    by = Math.min(by ,item.props?.y);
+                }
+            }
+            return ay - by;
         });
 
         setSortedChildren(sortedKids);
