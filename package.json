@@ -1,6 +1,6 @@
 {
 	"name": "@bucky24/react-canvas-map",
-	"version": "2.0.7",
+	"version": "2.0.8",
 	"description": "A 2D map plugin for React Canvas",
 	"main": "build/index.js",
 	"scripts": {

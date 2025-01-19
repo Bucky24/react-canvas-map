@@ -24,6 +24,7 @@ export function Layer({ id, children }) {
             let ay, by;
             if (Array.isArray(a)) {
                 for (const item of a) {
+                    if (typeof item !== "object") continue;
                     if (ay === undefined) {
                         ay = item.props?.y;
                         continue;
@@ -33,6 +34,7 @@ export function Layer({ id, children }) {
             }
             if (Array.isArray(b)) {
                 for (const item of b) {
+                    if (typeof item !== "object") continue;
                     if (by === undefined) {
                         by = item.props?.y;
                         continue;

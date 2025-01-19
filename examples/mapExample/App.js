@@ -22,7 +22,6 @@ function App() {
         <Canvas
             width={width}
             height={height}
-            debug={true}
         >
             <Map
                 x={100}
