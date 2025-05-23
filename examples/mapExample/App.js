@@ -50,6 +50,12 @@ function App() {
                         });
                     }
                 }
+                onPress={(x, y, button) => {
+                    console.log(button, "button pressed on", x, y);
+                }}
+                onRelease={(x, y, button) => {
+                    console.log(button, "button released on", x, y);
+                }}
                 mapBackground={{
                     color: "#0a0",
                 }}

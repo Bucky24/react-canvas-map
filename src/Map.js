@@ -26,6 +26,8 @@ const propTypes = {
     yOff: PropTypes.number,
     onMove: PropTypes.func,
     onClick: PropTypes.func,
+    onPress: PropTypes.func,
+    onRelease: PropTypes.func,
     moveType: PropTypes.oneOf(Object.values(MoveType)),
     zoomType: PropTypes.oneOf(Object.values(ZoomType)),
     zoom: PropTypes.number,
@@ -40,6 +42,8 @@ const defaultProps = {
     layers: [],
     onMove: () => {},
     onClick: () => {},
+    onPress: () => {},
+    onRelease: () => {},
     moveType: MoveType.MOUSE,
     zoomType: ZoomType.MOUSE,
     minCellX: 0,
@@ -175,13 +179,15 @@ class Map extends CanvasComponent {
         }
     }
 
-    onMouseDown({ x, y }, overMe) {
+    onMouseDown({ x, y, button }, overMe) {
         if (overMe) {
             this.setState({
                 smx: x,
                 smy: y,
             });
             this.props.setMouseDown(true);
+            const cell = this.cellFromReal(x, y);
+            this.props.onPress(cell.x, cell.y, button, x, y);
         }
     }
 
@@ -196,6 +202,10 @@ class Map extends CanvasComponent {
             smy: null,
         });
         this.props.setMouseDown(false);
+        if (overMe) {
+            const cell = this.cellFromReal(x, y);
+            this.props.onRelease(cell.x, cell.y, button, x, y);
+        }
     }
 
     onWheel({ up }, overMe) {
@@ -352,6 +362,8 @@ const MapWrapper = (props) => {
     // setting default props
     if (!props.onMove) props.onMove = () => {};
     if (!props.onClick) props.onClick = () => {};
+    if (!props.onPress) props.onPress = () => {};
+    if (!props.onRelease) props.onRelease = () => {};
     if (!props.moveType) props.moveType = MoveType.MOUSE;
     if (!props.zoomType) props.zoomType = ZoomType.MOUSE;
     if (!props.minCellX) props.minCellX = 0;

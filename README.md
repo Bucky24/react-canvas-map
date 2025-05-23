@@ -45,7 +45,9 @@ The Map component expects a series of Layers as its children. Layers are drawn i
 | mapBackground | MapBackground object, describes background for the map | No |
 | offMapBackground | MapBackground object, describes background for area that is not take up by the map | No |
 | onMove | Function, fires when mouse moves over a map cell. First param is cell x, second is cell y. | No |
-| onClick | Function, fires when move is clicked over a map cell. `onClick(cellX, cellY, button, rawX, rawY)` (button is a ButtonType from @bucky24/react-canvas). | No |
+| onClick | Function, fires when mouse is clicked over a map cell. `onClick(cellX, cellY, button, rawX, rawY)` (button is a ButtonType from @bucky24/react-canvas). | No |
+| onPress | Function, fires when mouse is pressed down over a map cell. `onPress(cellX, cellY, button, rawX, rawY)` (button is a ButtonType from @bucky24/react-canvas). | No |
+| onRelease | Function, fires when mouse is released over a map cell. `onClick(cellX, cellY, button, rawX, rawY)` (button is a ButtonType from @bucky24/react-canvas). | No |
 | zoom | Number that indicates the zoom level of the map. Used as initial value if zoomType is not NONE. 100 is default zoom (100% zoom) | No |
 | zoomType | One of the ZoomType entries. Determines how the map is zoomed. Defaults to MOUSE | No |
 | minCellX | The cell x at which the map will start drawing cells. Defaults 0 | No |
