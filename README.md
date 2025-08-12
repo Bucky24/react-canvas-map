@@ -178,10 +178,10 @@ A component that describes an item on the map
 
 | Param | Description | Required |
 | -- | -- | -- |
-| cellX | The x coord on the map of the item | Yes |
-| cellY | The y coord on the map of the item | Yes |
-| cellWidth | The width, in cells, of the item | Yes |
-| cellHeight | The height, in cells, of the item | Yes |
+| x | The x coord on the map of the item | Yes |
+| y | The y coord on the map of the item | Yes |
+| width | The width, in cells, of the item | Yes |
+| height | The height, in cells, of the item | Yes |
 | cb | Callback function that is called with a CellDims | Yes |
 
 #### CellDims
