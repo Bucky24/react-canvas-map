@@ -58,6 +58,7 @@ The Map component expects a series of Layers as its children. Layers are drawn i
 | type | MapType. Indicates type of map, defaults to MapType.STANDARD | No |
 | centerX | X coord of cell to center the map on. Ignored unless moveType is NONE | No |
 | centerY | Y coord of cell to center the map on. Ignored unless moveType is NONE | No |
+| layers | A `MapLayers` object, used for manually defining complex layers. | No |
 
 ## Layer
 
@@ -182,7 +183,7 @@ A component that describes an item on the map
 | y | The y coord on the map of the item | Yes |
 | width | The width, in cells, of the item | Yes |
 | height | The height, in cells, of the item | Yes |
-| cb | Callback function that is called with a CellDims | Yes |
+| cb | Callback function that is called with a CellDims and CellContext | Yes |
 
 #### CellDims
 
@@ -195,6 +196,16 @@ A component that describes an item on the map
 | x2 | x + width |
 | y2 | y + width |
 
+#### CellContext
+
+This is an object passed into the Cell callback function that provides some useful context methods:
+
+| Key | Description | 
+| -- | -- |
+| getDims | Allows finding the draw dimensions of a cell. Takes in x, y, width, and height |
+
+# Types
+
 ### DrawFuncParams
 
 An object that is passed into the drawFunc for raw drawing on layers. Note that any coords or widths here are already adjusted for map offset, map x/y, and zoom.
@@ -205,7 +216,7 @@ An object that is passed into the drawFunc for raw drawing on layers. Note that 
 | y | The y coord on the canvas where this item begins |
 | width | The width, in pixels, of the item |
 | height | The height, in pixels, of the item |
-| id | The id of the item. Whatever was givenin the CellItem is passed through here. |
+| id | The id of the item. Whatever was given in the CellItem is passed through here. |
 
 ### MapBackground
 
@@ -268,3 +279,7 @@ Note there may be some issues with the isometric grid, especially around display
 | -- | -- |
 | STANDARD | A normal square grid |
 | ISOMETRIC | An isometric grid |
+
+### CellItem
+
+This essentially is any raw data that is usually passed through.
