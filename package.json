@@ -1,6 +1,6 @@
 {
 	"name": "@bucky24/react-canvas-map",
-	"version": "2.1.0",
+	"version": "2.1.1",
 	"description": "A 2D map plugin for React Canvas",
 	"main": "build/index.js",
 	"scripts": {
@@ -39,16 +39,15 @@
 		"@babel/preset-env": "^7.10.4",
 		"@babel/preset-react": "^7.10.4",
 		"@bucky24/react-canvas": "^3.1.6",
-		"babel-loader": "^8.1.0",
-		"css-loader": "^6.7.1",
-		"file-loader": "^6.2.0",
+		"babel-loader": "^9.2.1",
+		"css-loader": "^7.1.2",
 		"html-webpack-plugin": "^5.5.0",
 		"image-webpack-loader": "^8.1.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"style-loader": "^1.2.1",
+		"style-loader": "^4.0.0",
 		"webpack": "^5.75.0",
-		"webpack-cli": "^4.10.0",
+		"webpack-cli": "^6.0.1",
 		"webpack-dev-server": "^5.2.1"
 	},
 	"peerDependencies": {

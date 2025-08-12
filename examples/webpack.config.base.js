@@ -1,9 +1,7 @@
 var path = require('path');
-var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = (dirname) => {
-	console.log(path.resolve(__dirname, '../src/index.js'));
 	return {
 		entry: path.resolve(dirname, './index.js'),
 		output: {
@@ -46,18 +44,8 @@ module.exports = (dirname) => {
 					},
 				},
 				{
-					test: /\.(jpe?g|png|gif|svg)$/i,
-					use: {
-						loader: 'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
-						options: {
-							loader: 'image-webpack-loader',
-							options: {
-								optipng: {
-									optimizationLevel: 4,
-								},
-							},
-						},
-					},
+					test: /\.(png|jpe?g|gif|svg)$/i,
+					type: "asset/resource"
 				},
 			],
 		},
