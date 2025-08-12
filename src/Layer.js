@@ -17,7 +17,10 @@ export function Layer({ id, children }) {
     extraProps.cellSize = mapContext.initialCellSize;
 
     useEffect(() => {
-        const sortedKids = [...(children || [])];
+        let useChildren = children;
+        if (!children) useChildren = [];
+        if (!Array.isArray(useChildren)) useChildren = [children];
+        const sortedKids = [...useChildren];
         // TODO: probably should flatten this, or try to go into children of children
         // to get coords just in case
         sortedKids.sort((a, b) => {
