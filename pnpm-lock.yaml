@@ -19,19 +19,19 @@ importers:
         version: 3.2.0
     devDependencies:
       '@babel/cli':
-        specifier: ^7.10.4
+        specifier: ^7.18.6
         version: 7.18.6(@babel/core@7.18.6)
       '@babel/core':
-        specifier: ^7.10.4
+        specifier: ^7.18.6
         version: 7.18.6
       '@babel/plugin-transform-react-jsx':
-        specifier: ^7.10.4
+        specifier: ^7.18.6
         version: 7.18.6(@babel/core@7.18.6)
       '@babel/preset-env':
-        specifier: ^7.10.4
+        specifier: ^7.18.6
         version: 7.18.6(@babel/core@7.18.6)
       '@babel/preset-react':
-        specifier: ^7.10.4
+        specifier: ^7.18.6
         version: 7.18.6(@babel/core@7.18.6)
       '@bucky24/react-canvas':
         specifier: ^3.1.6
@@ -58,13 +58,13 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0(webpack@5.104.1)
       webpack:
-        specifier: ^5.75.0
+        specifier: ^5.104.1
         version: 5.104.1(webpack-cli@6.0.1)
       webpack-cli:
         specifier: ^6.0.1
         version: 6.0.1(webpack-dev-server@5.2.4)(webpack@5.104.1)
       webpack-dev-server:
-        specifier: ^5.2.1
+        specifier: ^5.2.4
         version: 5.2.4(tslib@2.8.1)(webpack-cli@6.0.1)(webpack@5.104.1)
 
 packages:
@@ -1741,9 +1741,6 @@ packages:
 
   fast-json-stable-stringify@2.1.0:
     resolution: {integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==}
-
-  fast-uri@3.1.0:
-    resolution: {integrity: sha512-iPeeDKJSWf4IEOasVVrknXpaBV0IApz/gp7S2bb7Z4Lljbl2MGJRqInZiUrQwV16cpzw/D3S5j5Julj/gT52AA==}
 
   fast-uri@3.1.2:
     resolution: {integrity: sha512-rVjf7ArG3LTk+FS6Yw81V1DLuZl1bRbNrev6Tmd/9RaroeeRRJhAt7jg/6YFxbvAQXUCavSoZhPPj6oOx+5KjQ==}
@@ -4793,7 +4790,7 @@ snapshots:
   ajv@8.17.1:
     dependencies:
       fast-deep-equal: 3.1.3
-      fast-uri: 3.1.0
+      fast-uri: 3.1.2
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
@@ -5565,8 +5562,6 @@ snapshots:
       micromatch: 4.0.8
 
   fast-json-stable-stringify@2.1.0: {}
-
-  fast-uri@3.1.0: {}
 
   fast-uri@3.1.2: {}
 
